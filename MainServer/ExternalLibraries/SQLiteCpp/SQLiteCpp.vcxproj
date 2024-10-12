@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{78888043-D821-3CBA-91BF-545490B43496}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>SQLiteCpp</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\MainServer\ExternalLibraries\SQLiteCpp\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">SQLiteCpp.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">SQLiteCpp</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\MainServer\ExternalLibraries\SQLiteCpp\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SQLiteCpp.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SQLiteCpp</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\MainServer\ExternalLibraries\SQLiteCpp\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">SQLiteCpp.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">SQLiteCpp</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\MainServer\ExternalLibraries\SQLiteCpp\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">SQLiteCpp.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">SQLiteCpp</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\PUBLIC;D:\Programming\boost_1_85_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\sqlite3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -Wa,-mbig-obj</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);_WIN32_WINNT=0x0601;SQLITE_ENABLE_COLUMN_METADATA;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WIN32_WINNT=0x0601;SQLITE_ENABLE_COLUMN_METADATA;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\PUBLIC;D:\Programming\boost_1_85_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\sqlite3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\PUBLIC;D:\Programming\boost_1_85_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\sqlite3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\PUBLIC;D:\Programming\boost_1_85_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\sqlite3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -Wa,-mbig-obj</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);_WIN32_WINNT=0x0601;NDEBUG;SQLITE_ENABLE_COLUMN_METADATA;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WIN32_WINNT=0x0601;NDEBUG;SQLITE_ENABLE_COLUMN_METADATA;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\PUBLIC;D:\Programming\boost_1_85_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\sqlite3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\PUBLIC;D:\Programming\boost_1_85_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\sqlite3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\PUBLIC;D:\Programming\boost_1_85_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\sqlite3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -Wa,-mbig-obj</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);_WIN32_WINNT=0x0601;NDEBUG;SQLITE_ENABLE_COLUMN_METADATA;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WIN32_WINNT=0x0601;NDEBUG;SQLITE_ENABLE_COLUMN_METADATA;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\PUBLIC;D:\Programming\boost_1_85_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\sqlite3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\PUBLIC;D:\Programming\boost_1_85_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\sqlite3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\PUBLIC;D:\Programming\boost_1_85_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\sqlite3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -Wa,-mbig-obj</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);_WIN32_WINNT=0x0601;NDEBUG;SQLITE_ENABLE_COLUMN_METADATA;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WIN32_WINNT=0x0601;NDEBUG;SQLITE_ENABLE_COLUMN_METADATA;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\PUBLIC;D:\Programming\boost_1_85_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\sqlite3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\PUBLIC;D:\Programming\boost_1_85_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\sqlite3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master/ExternalLibraries/SQLiteCpp/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master" "-BC:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master/MainServer" --check-stamp-file "C:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master/MainServer/ExternalLibraries/SQLiteCpp/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.30\Modules\BasicConfigVersion-AnyNewerVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPython.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\WriteBasicConfigVersionFile.cmake;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\cmake\SQLiteCppConfig.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\MainServer\ExternalLibraries\SQLiteCpp\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master/ExternalLibraries/SQLiteCpp/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master" "-BC:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master/MainServer" --check-stamp-file "C:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master/MainServer/ExternalLibraries/SQLiteCpp/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.30\Modules\BasicConfigVersion-AnyNewerVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPython.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\WriteBasicConfigVersionFile.cmake;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\cmake\SQLiteCppConfig.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\MainServer\ExternalLibraries\SQLiteCpp\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master/ExternalLibraries/SQLiteCpp/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master" "-BC:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master/MainServer" --check-stamp-file "C:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master/MainServer/ExternalLibraries/SQLiteCpp/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.30\Modules\BasicConfigVersion-AnyNewerVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPython.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\WriteBasicConfigVersionFile.cmake;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\cmake\SQLiteCppConfig.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\MainServer\ExternalLibraries\SQLiteCpp\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master/ExternalLibraries/SQLiteCpp/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master" "-BC:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master/MainServer" --check-stamp-file "C:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master/MainServer/ExternalLibraries/SQLiteCpp/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.30\Modules\BasicConfigVersion-AnyNewerVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPython.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\WriteBasicConfigVersionFile.cmake;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\cmake\SQLiteCppConfig.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\MainServer\ExternalLibraries\SQLiteCpp\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\src\Backup.cpp" />
+    <ClCompile Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\src\Column.cpp" />
+    <ClCompile Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\src\Database.cpp" />
+    <ClCompile Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\src\Exception.cpp" />
+    <ClCompile Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\src\Savepoint.cpp" />
+    <ClCompile Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\src\Statement.cpp" />
+    <ClCompile Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\src\Transaction.cpp" />
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\SQLiteCpp.h" />
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Assertion.h" />
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Backup.h" />
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Column.h" />
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Database.h" />
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Exception.h" />
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Savepoint.h" />
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Statement.h" />
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Transaction.h" />
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\VariadicBind.h" />
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\ExecuteMany.h" />
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\README.md">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\LICENSE.txt">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\CHANGELOG.md">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\TODO.txt">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.editorconfig">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.gitbugtraq">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.github\dependabot.yml">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.github\workflows\cmake.yml">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.github\workflows\cmake_builtin_lib.yml">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.github\workflows\cmake_subdir_example.yml">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.github\workflows\meson.yml">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.gitignore">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.gitmodules">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.travis.yml">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\appveyor.yml">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\build.bat">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\build.sh">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\cmake\FindSQLite3.cmake">
+    </None>
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\cmake\SQLiteCppConfig.cmake.in" />
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\cpplint.py">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\Doxyfile">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\meson.build">
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\meson_options.txt">
+    </None>
+    <XML Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\package.xml">
+    </XML>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\MainServer\ZERO_CHECK.vcxproj">
+      <Project>{DBDADD24-CFB3-3024-9BEE-A270F9027617}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\MainServer\ExternalLibraries\SQLiteCpp\sqlite3\sqlite3.vcxproj">
+      <Project>{D02DB4D2-5816-3CBB-8F64-CC594A4CE18C}</Project>
+      <Name>sqlite3</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

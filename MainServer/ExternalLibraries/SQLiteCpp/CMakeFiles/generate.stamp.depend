@@ -1,0 +1,11 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-3.30/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in
+C:/Program Files/CMake/share/cmake-3.30/Modules/CMakePackageConfigHelpers.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/FindPackageMessage.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/FindPython.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/FindPython/Support.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/GNUInstallDirs.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/WriteBasicConfigVersionFile.cmake
+C:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master/ExternalLibraries/SQLiteCpp/CMakeLists.txt
+C:/Users/mikae/OneDrive/Documents/MicrovoltsEmulator-master (1)/MicrovoltsEmulator-master/ExternalLibraries/SQLiteCpp/cmake/SQLiteCppConfig.cmake.in

@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\src\Backup.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\src\Column.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\src\Database.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\src\Exception.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\src\Savepoint.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\src\Statement.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\src\Transaction.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\SQLiteCpp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Assertion.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Backup.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Column.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Database.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Exception.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Savepoint.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Statement.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\Transaction.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\VariadicBind.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp\ExecuteMany.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\cmake\SQLiteCppConfig.cmake.in">
+      <Filter>scripts</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\README.md">
+      <Filter>doc</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\LICENSE.txt">
+      <Filter>doc</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\CHANGELOG.md">
+      <Filter>doc</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\TODO.txt">
+      <Filter>doc</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.editorconfig">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.gitbugtraq">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.github\dependabot.yml">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.github\workflows\cmake.yml">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.github\workflows\cmake_builtin_lib.yml">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.github\workflows\cmake_subdir_example.yml">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.github\workflows\meson.yml">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.gitignore">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.gitmodules">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\.travis.yml">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\appveyor.yml">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\build.bat">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\build.sh">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\cmake\FindSQLite3.cmake">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\cpplint.py">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\Doxyfile">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\meson.build">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\meson_options.txt">
+      <Filter>scripts</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <XML Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\package.xml">
+      <Filter>scripts</Filter>
+    </XML>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="doc">
+      <UniqueIdentifier>{A2C49C32-6FF2-3EC9-8FAD-54FC8DA33829}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{4EF7242B-2F66-3C48-A2BA-6D105F15B837}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scripts">
+      <UniqueIdentifier>{1F744784-43F0-321F-A3D0-5392D27340F4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{1E8EB6A5-8C64-3CC8-8404-673C616F729A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

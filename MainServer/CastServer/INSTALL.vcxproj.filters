@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\MainServer\CMakeFiles\17748b9647ecd6801b3593e15f9ba85a\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{84597947-A4BE-3B1F-BA29-05437D16A848}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
