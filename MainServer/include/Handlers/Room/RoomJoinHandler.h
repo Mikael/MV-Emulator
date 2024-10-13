@@ -85,25 +85,6 @@ namespace Main
 				return;
 			}
 
-			// 2. Check whether the room is full. If so, try to join the observer team if it isn't full too. Otherwise, one cannot enter the room
-			bool joinedAsObserver = false;
-			if (room.isRoomFullObserverExcluded())
-			{
-				if (room.isObserverFull() || !roomSettings.isObserverModeOn)
-				{
-					logger.log("The player " + session.getPlayerInfoAsString() + " attempted to join a room that is full. "
-						+ room.getRoomInfoAsString(), Utils::LogType::Warning, "Room::roomJoinHandler");
-
-					response.setExtra(RoomJoinExtra::JOIN_LOBBY_FULL);
-					session.asyncWrite(response);
-					return;
-				}
-				else
-				{
-					joinedAsObserver = true;
-				}
-			}
-
 			// 3. Check whether the player was previously kicked from this room
 			if (room.wasPreviouslyKicked(accountInfo.accountID))
 			{
@@ -193,7 +174,40 @@ namespace Main
 			response.setData(reinterpret_cast<std::uint8_t*>(allPlayersClans.data()), sizeof(Main::Structures::PlayerClan) * allPlayersClans.size());
 			session.asyncWrite(response);
 
-			// Success in joining the room
+
+			// 2. Check if room is full (players-only). If full, try to join as an observer.
+			bool joinedAsObserver = false;
+			if (room.isRoomFullObserverExcluded()) // Room full
+			{
+				if (roomSettings.isObserverModeOn && !room.isObserverFull())
+				{
+					// Room is full, but observer slots are available
+					joinedAsObserver = true;
+					response.setOrder(request.getOrder());
+					response.setData(nullptr, 0);
+					response.setOption(1);
+					response.setMission(0);
+					// extra 0, mission 0 ==> observer mode
+					// extra 0, mission 1 ==> seemingly invisible mode?!
+					response.setExtra(joinedAsObserver ? RoomJoinExtra::JOIN_OBSERVER_MODE : RoomJoinExtra::JOIN_SUCCESS);
+					session.asyncWrite(response);
+					logger.log("The player " + session.getPlayerInfoAsString() + " was forced to join as an observer due to a full room. "
+						+ room.getRoomInfoAsString(), Utils::LogType::Info, "Room::roomJoinHandler");
+				}
+				else
+				{
+					// Both player and observer slots are full
+					logger.log("The player " + session.getPlayerInfoAsString() + " attempted to join a room that is full. "
+						+ room.getRoomInfoAsString(), Utils::LogType::Warning, "Room::roomJoinHandler");
+
+					response.setExtra(RoomJoinExtra::JOIN_LOBBY_FULL);
+					session.asyncWrite(response);
+					return;
+				}
+			}
+
+			if (!joinedAsObserver)
+			{
 			response.setOrder(request.getOrder());
 			response.setData(nullptr, 0);
 			response.setOption(1);
@@ -203,7 +217,7 @@ namespace Main
 			response.setExtra(joinedAsObserver ? RoomJoinExtra::JOIN_OBSERVER_MODE : RoomJoinExtra::JOIN_SUCCESS);
 			response.setExtra(RoomJoinExtra::JOIN_SUCCESS);
 			session.asyncWrite(response);
-
+			}
 			// THIS SEEMS WRONG. FIRST IT NEEDS TO BE SENT BEFORE "SUCCESS IN JOINING THE ROOM" PROBABLY; BUT THEN SETTINGS ARE WRONG.
 			
 			// Latest, missing information about the room

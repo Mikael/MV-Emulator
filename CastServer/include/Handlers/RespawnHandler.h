@@ -30,13 +30,12 @@ namespace Cast
             {
                 std::uint16_t x = 0;
                 std::uint16_t y = 0;
-                std::uint16_t z = 0;
+                std::uint16_t z = 70;
                 std::uint16_t w = 0;
                 Main::Structures::UniqueId targetUniqueId{};
             } playerRespawnPosition;
 
             std::memcpy(&playerRespawnPosition, request.getData(), sizeof(playerRespawnPosition));
-            playerRespawnPosition.z += 70; // add some more height 
             response.setData(reinterpret_cast<std::uint8_t*>(&playerRespawnPosition), sizeof(playerRespawnPosition));
 
             const auto targetSessionId = playerRespawnPosition.targetUniqueId.session;

@@ -8,6 +8,7 @@
 #include "../../../include/Network/MainSession.h"
 #include "../../../include/Network/MainSessionManager.h"
 #include <ConstantDatabase/Structures/SetItemInfo.h>
+#include <Utils/Utils.h>
 
 namespace Main
 {

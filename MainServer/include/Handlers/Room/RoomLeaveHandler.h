@@ -30,7 +30,7 @@ namespace Main
 			KICK_PLAYER = 28,
 		};
 
-	
+
 		// Notifies other players that the player with uniqueId left the room (if you don't send this: the other player clients still believe you're in the room!)
 		// NOTE: This decrements all player indexes inside the client! Call it ONLY AFTER sending the packet to change the host!
 		inline void notifyRoomPlayerLeaves(Main::Structures::UniqueId uniqueId, Main::Classes::Room& room)

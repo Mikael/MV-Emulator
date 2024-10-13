@@ -48,6 +48,16 @@ namespace Main
 			return std::nullopt;
 		}
 
+		Main::Classes::Room* RoomsManager::getRoomByNumber2(std::uint16_t roomNumber)
+		{
+			auto it = m_roomByNumber.find(roomNumber);
+			if (it != m_roomByNumber.end())
+			{
+				return &it->second;
+			}
+			return nullptr;
+		}
+
 		void RoomsManager::broadcastToRoom(std::uint16_t roomNumber, Common::Network::Packet& packet)
 		{
 			if (!m_roomByNumber.contains(roomNumber)) return;

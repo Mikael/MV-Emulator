@@ -136,7 +136,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\json-develop\json-develop\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp;D:\range-v3\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries;D:\boost_1_86_0;..\Common\include;..\ExternalLibraries\asio-1.24.0\include;..\ExternalLibraries</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;D:\json-develop\json-develop\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp;D:\range-v3\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries;D:\boost_1_86_0;..\Common\include;..\ExternalLibraries\asio-1.24.0\include;..\ExternalLibraries</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <Optimization>MaxSpeed</Optimization>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>

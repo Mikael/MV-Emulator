@@ -14,9 +14,26 @@ namespace Main
 	{
 		void SessionsManager::addSession(Main::Network::Session* session)
 		{
-			m_sessionsBySessionId.emplace(session->getId(), session);
-			m_sessionsByAccountId.emplace(session->getAccountInfo().accountID, session);
+			auto sessionId = session->getId();
+			auto accountId = session->getAccountInfo().accountID;
+
+			// Check if session ID already exists
+			if (m_sessionsBySessionId.contains(sessionId)) {
+				// Optionally handle the duplicate case (e.g., log an error or warning)
+				return; // Exit early if a duplicate session ID is found
+			}
+
+			// Check if account ID already exists
+			if (m_sessionsByAccountId.contains(accountId)) {
+				// Optionally handle the duplicate case (e.g., log an error or warning)
+				return; // Exit early if a duplicate account ID is found
+			}
+
+			// Insert the session if checks pass
+			m_sessionsBySessionId.emplace(sessionId, session);
+			m_sessionsByAccountId.emplace(accountId, session);
 		}
+
 
 		void SessionsManager::removeSession(std::size_t sessionId)
 		{
@@ -88,6 +105,10 @@ namespace Main
 			roomsManager = rmManager;
 		}
 
+		std::uint32_t SessionsManager::getTotalSessions() const
+		{
+			return m_sessionsBySessionId.size();
+		}
 
 		const std::unordered_map<std::uint64_t, Main::Network::Session*>& SessionsManager::getAllSessions() const
 		{
@@ -134,11 +155,6 @@ namespace Main
 				const auto& otherAccountInfo = otherSession->getAccountInfo();
 				if (otherAccountInfo.clanId == selfAccountInfo.clanId) otherSession->asyncWrite(message);
 			}
-		}
-
-		std::uint32_t SessionsManager::getTotalSessions() const
-		{
-			return m_sessionsBySessionId.size();
 		}
 
 		Main::Network::Session* SessionsManager::findSessionByName(const char* nickname)

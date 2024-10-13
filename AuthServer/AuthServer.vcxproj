@@ -137,9 +137,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_WIN32_WINNT=0x0601;SQLITECPP_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\cpp-httplib-master;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\json-develop\json-develop\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\curl-master %281%29\curl-master\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp;D:\range-v3\include;D:\boost_1_86_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\Common\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\AuthServer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\sqlite3;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\cpp-httplib-master;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\json-develop\json-develop\include;D:\curl-master\include;D:\range-v3\include;D:\boost_1_86_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\Common\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\AuthServer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
@@ -148,7 +148,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>..\ExternalLibraries\CommonLib\Common.lib;..\ExternalLibraries\SQLiteCpp\sqlite3\sqlite3.lib;..\ExternalLibraries\SQLiteCpp\sqlite3\SQLiteCpp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>..\ExternalLibraries\CommonLib\Common.lib;..\ExternalLibraries\SQLiteCpp\sqlite3\sqlite3.lib;..\ExternalLibraries\SQLiteCpp\sqlite3\SQLiteCpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -110,26 +110,25 @@ namespace Main
                         + room.getRoomInfoAsString(), Utils::LogType::Normal, "Room::handleRoomStart");
                 }
             }
-			else if (request.getExtra() == 41)
-			{
-				if (room.isHost(selfUniqueId))
-				{
-
-					response.setOrder(258);
-					response.setExtra(1 /* 5 == infinite loading for host ??*/); 
-					response.setOption(0);
-					struct Response
-					{
-						std::uint64_t tick = 0; 
-					};
-					Response respMessage;
+            else if (request.getExtra() == 41)
+            {
+                if (room.isHost(selfUniqueId))
+                {
+                    response.setOrder(258);
+                    response.setExtra(1);
+                    response.setOption(0);
+                    struct Response
+                    {
+                        std::uint64_t tick = 0;
+                    };
+                    Response respMessage;
                     respMessage.tick = getUtcTimeMs() - timeSinceLastServerRestart;
-					response.setData(reinterpret_cast<std::uint8_t*>(&respMessage), sizeof(respMessage));
-					room.broadcastToRoom(response);
+                    response.setData(reinterpret_cast<std::uint8_t*>(&respMessage), sizeof(respMessage));
+                    room.broadcastToRoom(response);
 
-					logger.log("The player " + session.getPlayerInfoAsString() + " is also host. RoomTick set and broadcast to room. "
-						+ room.getRoomInfoAsString(), Utils::LogType::Normal, "Room::handleRoomStart");
-				}
+                    logger.log("The player " + session.getPlayerInfoAsString() + " is also host. RoomTick set and broadcast to room. "
+                        + room.getRoomInfoAsString(), Utils::LogType::Normal, "Room::handleRoomStart");
+                }
                 else
                 {
                     response.setOrder(415);

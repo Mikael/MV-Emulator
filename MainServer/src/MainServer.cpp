@@ -55,7 +55,7 @@
 #include "../include/Network/MainSession.h"
 #include "../include/ChatCommands/AllCommandsIncludes.h"
 #include <Network/AuthSession.h>
-
+#include <Utils/IPC_Structs.h>
 
 namespace Main
 {
@@ -65,11 +65,10 @@ namespace Main
 		, m_authServerAcceptor{ io_context, tcp::endpoint(tcp::v4(), authPort) }
 		, m_serverId{ serverId }
 		, m_database{ "../ExternalLibraries/Database/GameDatabase.db" }
-		, m_scheduler{ 300, m_database }
-	{
-		const auto durationSinceEpoch = std::chrono::system_clock::now().time_since_epoch();
-		m_timeSinceLastRestart = static_cast<std::uint64_t>(duration_cast<std::chrono::milliseconds>(durationSinceEpoch).count());
+		, m_scheduler{ 100, m_database }
+		, m_timeSinceLastRestart{ Utils::IPCManager::getCurrentTimeInMilliseconds() }
 
+	{
 		initializeAllCommands();
 
 

@@ -2,7 +2,7 @@
 #define CDB_WEAPON_INFO_H
 
 #include "visit_struct/visit_struct.hpp"
-#include <nlohmann/json.hpp> // Include for JSON handling
+#include <nlohmann/json.hpp>
 
 namespace Common
 {

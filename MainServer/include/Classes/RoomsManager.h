@@ -22,6 +22,8 @@ namespace Main
 
 			std::size_t getTotalRooms() const;
 
+			Main::Classes::Room* getRoomByNumber2(std::uint16_t roomNumber);
+
 			std::vector<Main::Structures::SingleRoom> getRoomsList() const;
 
 			std::optional<std::reference_wrapper<Main::Classes::Room>> getRoomByNumber(std::uint16_t roomNumber);

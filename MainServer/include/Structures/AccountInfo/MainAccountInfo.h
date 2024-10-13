@@ -96,13 +96,6 @@ namespace Main
 				const auto durationSinceEpoch = std::chrono::system_clock::now().time_since_epoch();
 				return static_cast<std::uint64_t>(duration_cast<std::chrono::milliseconds>(durationSinceEpoch).count());;
 			}
-
-			void setServerTime()
-			{ 
-				//51877635
-				serverTime = getUtcTimeMs();
-			}
-
 		};
 #pragma pack(pop)
 

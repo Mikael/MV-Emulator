@@ -91,18 +91,18 @@ namespace Cast
                 playerInfoBasicResponse.rotation3 = playerPositionFromClient.rotation;
                 playerInfoBasicResponse.specificInfo.sessionId = static_cast<std::uint32_t>(session.getId());
 
-                if (roomsManager.exists(session.getId()) && Cast::Utils::isSuicide(roomsManager.getMapOf(session.getId()), playerInfoBasicResponse.position.positionZ))
-                {
-                    response.setOrder(264);
-                    Cast::Structures::SuicideStructure suicideStruct;
-                    suicideStruct.uniqueId = Main::Structures::UniqueId{ static_cast<std::uint32_t>(session.getId()), 4, 0 };
-                    suicideStruct.posX = playerPositionFromClient.position.positionX;
-                    suicideStruct.posY = playerPositionFromClient.position.positionY;
-                    suicideStruct.posZ = playerPositionFromClient.position.positionZ;
-                    response.setData(reinterpret_cast<std::uint8_t*>(&suicideStruct), sizeof(suicideStruct));
-                    roomsManager.broadcastToRoom(session.getId(), response);
-                    return;
-                }
+                /* if ((session.getRoomId() == session.getId()) && Cast::Utils::isSuicide(roomsManager.getMapOf(session.getRoomId()), playerInfoBasicResponse.position.positionZ))
+                 {
+                     response.setOrder(264);
+                     Cast::Structures::SuicideStructure suicideStruct;
+                     suicideStruct.uniqueId = Main::Structures::UniqueId{ static_cast<std::uint32_t>(session.getId()), 4, 0 };
+                     suicideStruct.posX = playerPositionFromClient.position.positionX;
+                     suicideStruct.posY = playerPositionFromClient.position.positionY;
+                     suicideStruct.posZ = playerPositionFromClient.position.positionZ;
+                     response.setData(reinterpret_cast<std::uint8_t*>(&suicideStruct), sizeof(suicideStruct));
+                     roomsManager.broadcastToRoom(session.getRoomId(), response);
+                     return;
+                 }*/
                 if (fullSize == 28)
                 {
                     response.setData(reinterpret_cast<std::uint8_t*>(&playerInfoBasicResponse), sizeof(playerInfoBasicResponse));

@@ -3,8 +3,9 @@
 
 #include "Network/Session.h"
 #include "../../MainEnums.h"
-
 #include <unordered_map>
+#include <Classes/Player.h>
+#include <Network/MainSessionManager.h>
 
 namespace Main
 {
@@ -15,10 +16,10 @@ namespace Main
         {
             std::uint32_t accountID;
             std::memcpy(&accountID, request.getData(), sizeof(std::uint32_t));
-          
+
             auto playerItems = database.getPlayerItems(accountID);
-            auto nonEquippedItems = playerItems.first;
-            auto equippedItems = playerItems.second;  
+            auto& nonEquippedItems = playerItems.first;
+            auto& equippedItems = playerItems.second;
 
             // Handle non-equipped items
             Common::Network::Packet response;
@@ -27,42 +28,34 @@ namespace Main
             response.setOption(nonEquippedItems.size());
 
             constexpr std::size_t headerSize = sizeof(Common::Protocol::TcpHeader) + sizeof(Common::Protocol::CommandHeader);
-            std::size_t totalSize = headerSize + nonEquippedItems.size() * sizeof(Main::Structures::Item);
             constexpr std::size_t MAX_PACKET_SIZE = 1440;
+            std::size_t totalSize = headerSize + nonEquippedItems.size() * sizeof(Main::Structures::Item);
 
             if (totalSize == headerSize)
             {
                 response.setData(nullptr, 0);
                 response.setExtra(6);
-                session.asyncWrite(response);
             }
             else if (totalSize < MAX_PACKET_SIZE)
             {
                 response.setExtra(37);
                 response.setData(reinterpret_cast<std::uint8_t*>(nonEquippedItems.data()), nonEquippedItems.size() * sizeof(Main::Structures::Item));
-                session.asyncWrite(response);
             }
             else
             {
                 std::size_t currentItemIndex = 0;
-                std::uint16_t packetExtra = 0;
                 const std::size_t maxPayloadSize = MAX_PACKET_SIZE - headerSize;
                 const std::size_t itemsToSend = maxPayloadSize / sizeof(Main::Structures::Item);
 
                 while (currentItemIndex < nonEquippedItems.size())
                 {
-                    std::vector<Main::Structures::Item> packetItems(
-                        nonEquippedItems.begin() + currentItemIndex,
-                        nonEquippedItems.begin() + std::min(currentItemIndex + itemsToSend, nonEquippedItems.size())
-                    );
-
-                    packetExtra = currentItemIndex == 0 ? 37 : 0;
-                    response.setExtra(packetExtra);
-                    response.setData(reinterpret_cast<std::uint8_t*>(packetItems.data()), packetItems.size() * sizeof(Main::Structures::Item));
-                    response.setOption(packetItems.size());
+                    auto endIndex = std::min(currentItemIndex + itemsToSend, nonEquippedItems.size());
+                    response.setExtra(currentItemIndex == 0 ? 37 : 0);
+                    response.setData(reinterpret_cast<std::uint8_t*>(nonEquippedItems.data() + currentItemIndex),
+                        (endIndex - currentItemIndex) * sizeof(Main::Structures::Item));
+                    response.setOption(endIndex - currentItemIndex);
                     session.asyncWrite(response);
-
-                    currentItemIndex += itemsToSend;
+                    currentItemIndex = endIndex;
                 }
             }
 
@@ -72,11 +65,12 @@ namespace Main
             response.setOrder(75);
             response.setMission(0);
 
-            for (auto& [characterID, items] : equippedItems)
+            for (const auto& [characterID, items] : equippedItems)
             {
                 response.setExtra(characterID);
                 response.setOption(items.size());
-                response.setData(reinterpret_cast<std::uint8_t*>(items.data()), items.size() * sizeof(Main::Structures::EquippedItem));
+                response.setData(reinterpret_cast<std::uint8_t*>(const_cast<Main::Structures::EquippedItem*>(items.data())),
+                    items.size() * sizeof(Main::Structures::EquippedItem));
                 session.asyncWrite(response);
             }
 

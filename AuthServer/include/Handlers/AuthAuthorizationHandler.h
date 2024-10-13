@@ -36,34 +36,30 @@ namespace Auth
                 return;
             }
 
-            // Extract the nickname from the response packet
-            const int nicknameOffset = 16; // Example offset
-            const int nicknameMaxLength = 32; // Example maximum length
+            const int nicknameOffset = 16;
+            const int nicknameMaxLength = 32;
             std::string nickname(reinterpret_cast<const char*>(response.getData() + nicknameOffset), nicknameMaxLength);
-            nickname.erase(nickname.find_last_not_of('\0') + 1); // Trim any null characters
+            nickname.erase(nickname.find_last_not_of('\0') + 1);
 
-            // Successful login, create a ConnectionPacket
             Auth::Structures::ConnectionPacket connectionPacket;
 
-            // Log successful login
             std::cout << "User " << username << " logged in successfully." << std::endl;
             std::cout << "Nickname: " << nickname << std::endl;
             std::cout << "Connection key: " << connectionPacket.key << std::endl;
             std::cout << "Connection timestamp: " << connectionPacket.timestamp << std::endl;
 
-            // Prepare connection response
             Common::Network::Packet connectionResponse;
             connectionResponse.setTcpHeader(request.getSession(), Common::Enums::USER_LARGE_ENCRYPTION);
             connectionResponse.setOrder(23);
             connectionResponse.setData(reinterpret_cast<uint8_t*>(&connectionPacket), sizeof(connectionPacket));
 
-            // Send connection response and original response
             session.asyncWrite(connectionResponse);
             session.asyncWrite(response);
 
-            // Add the player to the player manager
+
             Auth::Player::AuthPlayerManager::getInstance().addPlayer(session.getId(), pair.second);
         }
+
     }
 }
 
