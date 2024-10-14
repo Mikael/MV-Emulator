@@ -434,39 +434,21 @@ namespace Main
 				m_accountInfo.accountID, static_cast<std::uint64_t>(itemNumber));
 		}
 
+		// ugly design but easier to write, ideally we shouldn't pass the scheduler to this function...
+		// TODO: Test this, add logs, check si_acce_B and si_acce_C
 		void Player::equipItem(const std::uint16_t itemNumber, Main::Persistence::MainScheduler& scheduler)
 		{
-			// Check if the item exists in the inventory
-			if (m_itemsByItemNumber.find(itemNumber) == m_itemsByItemNumber.end())
-			{
-				std::cout << "Item Number " << itemNumber << " does not exist. Deleting from inventory...\n";
-
-				// Create a serial info object to delete the item
-				Main::Structures::ItemSerialInfo itemSerialInfoToDelete = { itemNumber };
-
-				// Call deleteItemBasic to remove the illegal item
-				if (deleteItem(itemSerialInfoToDelete))
-				{
-					std::cout << "Illegal item deleted from inventory.\n";
-				}
-				else
-				{
-					std::cout << "Failed to delete illegal item from inventory.\n";
-				}
-				return; // Exit if the item doesn't exist
-			}
-
-			// Proceed to equip the item since it exists
+			// Find the type of the to-be-added equipped item
 			EquippedItem equippedItem = EquippedItem{ m_itemsByItemNumber[itemNumber] };
 
-			// Logic for equipping set items
+			// Special case: the user is equipping a set => we need to unequip item types that are already present in said set.
 			if (equippedItem.type == Common::Enums::ItemType::SET)
 			{
 				std::cout << "User Equipping Set. Unequipping Parts Relative To Set...\n";
 				using setItems = Common::ConstantDatabase::CdbSingleton<Common::ConstantDatabase::SetItemInfo>;
 				const auto entry = setItems::getInstance().getEntry("si_id", m_itemsByItemNumber[itemNumber].id);
 
-				if (entry)
+				if (entry != std::nullopt)
 				{
 					for (auto currentTypeNotNull : Common::Utils::getPartTypesWhereSetItemInfoTypeNotNull(*entry))
 					{
@@ -478,55 +460,53 @@ namespace Main
 
 			auto& itemMap = m_equippedItemByCharacter[m_accountInfo.latestSelectedCharacter];
 
-			// Logic for unequipping already equipped items
-			auto equippedSetIt = itemMap.find(Common::Enums::ItemType::SET);
-			if (equippedSetIt != itemMap.end())
+			// Again, special case: the user has an already equipped set. We need to unequip it if the user is now equipping a part type that is already present in said set.
+			if (itemMap.contains(Common::Enums::ItemType::SET))
 			{
 				std::cout << "User has a Set Equipped. Unequipping the set before equipping the parts...\n";
 				using setItems = Common::ConstantDatabase::CdbSingleton<Common::ConstantDatabase::SetItemInfo>;
-				const auto entry = setItems::getInstance().getEntry("si_id", equippedSetIt->second.id >> 1);
+				const auto entry = setItems::getInstance().getEntry("si_id", itemMap[Common::Enums::ItemType::SET].id >> 1);
 
-				if (entry)
+				if (entry != std::nullopt)
 				{
 					for (auto currentTypeNotNull : Common::Utils::getPartTypesWhereSetItemInfoTypeNotNull(*entry))
 					{
 						if (equippedItem.type == currentTypeNotNull)
 						{
 							std::cout << "Set Found. Unequipping...\n";
-							unequipItemImpl(Common::Enums::ItemType::SET, scheduler);
+							unequipItemImpl(Common::Enums::SET, scheduler);
 							break;
 						}
 					}
 				}
 			}
 
-			// Remove the item from the inventory since it is being equipped
+			// Delete this item from the Non-Equipped items, since we'll add it to the Equipped items.
 			m_itemsByItemNumber.erase(itemNumber);
 
-			// Logic for unequipping any existing equipped item of the same type
-			auto equippedIt = itemMap.find(equippedItem.type);
-			if (equippedIt != itemMap.end())
+			// now proceed normally: check if equippedItems already has such a type
+			if (itemMap.contains(equippedItem.type))
 			{
 				std::cout << "Unequipping Item...\n";
-				auto toUnequipItemNumber = equippedIt->second.serialInfo.itemNumber;
 
-				// Re-add the unequipped item back to inventory
-				m_itemsByItemNumber[toUnequipItemNumber] = Item{ equippedIt->second };
-				itemMap.erase(equippedIt);
+				auto toUnequipItemNumber = itemMap.at(equippedItem.type).serialInfo.itemNumber;
+				m_itemsByItemNumber[toUnequipItemNumber] = Item{ itemMap.at(equippedItem.type) };
+				itemMap.erase(equippedItem.type);
+				itemMap[equippedItem.type] = equippedItem;
+
+				scheduler.addRepetitiveCallback(m_accountInfo.accountID, &Main::Persistence::PersistentDatabase::swapItems,
+					m_accountInfo.accountID, toUnequipItemNumber, static_cast<std::uint64_t>(equippedItem.serialInfo.itemNumber),
+					static_cast<std::uint16_t>(m_accountInfo.latestSelectedCharacter));
+				return;
 			}
 
-			// Equip the new item
+			// Otherwise just add the to-be-added item to the equipped items.
 			itemMap[equippedItem.type] = equippedItem;
 			++m_totalEquippedItems;
 
-			// Schedule a callback to persist the equipped item state
 			scheduler.addRepetitiveCallback(m_accountInfo.accountID, &Main::Persistence::PersistentDatabase::equipItem,
 				m_accountInfo.accountID, static_cast<std::uint64_t>(equippedItem.serialInfo.itemNumber), static_cast<std::uint16_t>(m_accountInfo.latestSelectedCharacter));
 		}
-
-
-
-
 
 		std::optional<std::uint64_t> Player::unequipItem(std::uint64_t itemType, Main::Persistence::MainScheduler& scheduler)
 		{

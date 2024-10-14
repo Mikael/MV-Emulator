@@ -20,7 +20,6 @@ namespace Cast
 			void printRoomInfo(std::uint64_t sessionId, const std::string& furtherInfo)
 			{
 			}
-
 			void switchRoomJoinOrExit(Cast::Network::Session& session, std::uint64_t hostSessionId = -1);
 
 			void broadcastToRoomExceptSelf(std::uint64_t selfSessionId, Common::Network::Packet& packet);

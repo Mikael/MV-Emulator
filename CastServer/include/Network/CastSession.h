@@ -18,7 +18,7 @@ namespace Cast
             Main::Structures::AccountInfo m_accountInfo{};
             Main::Structures::UniqueId m_uniqueId{};
             std::int64_t m_roomId{ -1 };
-            bool m_isInMatch{ false };
+            bool m_isInMatch{ 0 };
             std::uint32_t m_roomNumber{};
 
             using tcp = asio::ip::tcp;
@@ -32,18 +32,21 @@ namespace Cast
             void setRoomId(std::uint64_t id);
             std::uint64_t getRoomId() const;
             const Main::Structures::AccountInfo& getAccountInfo() const;
+
             void setUniqueId(const Main::Structures::UniqueId& uniqueId);
             const Main::Structures::UniqueId getUniqueId() const;
+
             bool isInMatch() const;
             void setIsInMatch(bool val);
+
             void setSessionId(std::size_t id) {
                 m_id = id;
             }
-            void updateMatchStatus(bool inMatch);
+            //void updateMatchStatus(bool inMatch);
             void close();
 
         private:
-            void notifyMatchStatusChange(bool inMatch);
+            //void notifyMatchStatusChange(bool inMatch);
         };
     }
 }

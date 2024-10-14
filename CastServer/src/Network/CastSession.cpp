@@ -93,19 +93,18 @@ namespace Cast
             return m_isInMatch;
         }
 
-        void Session::updateMatchStatus(bool inMatch)
-        {
-            if (m_isInMatch != inMatch)
-            {
-                m_isInMatch = inMatch;  // Update the match status
-                std::cout << "Session ID: " << m_id << " is now " << (inMatch ? "in" : "not in") << " a match.\n";
-                //notifyMatchStatusChange(inMatch); 
-            }
-        }
+        //void Session::updateMatchStatus(bool inMatch)
+        //{
+        //    if (m_isInMatch != inMatch)
+        //    {
+        //        m_isInMatch = inMatch;  // Update the match status
+        //        std::cout << "Session ID: " << m_id << " is now " << (inMatch ? "in" : "not in") << " a match.\n";
+        //        //notifyMatchStatusChange(inMatch); 
+        //    }
+        //}
 
         void Session::setIsInMatch(bool val)
         {
-            std::cout << "Set Is In Match set to: " << val << " for sessionID: " << m_id << '\n';
             m_isInMatch = val;
         }
 
