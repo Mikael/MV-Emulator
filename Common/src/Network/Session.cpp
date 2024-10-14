@@ -3,6 +3,8 @@
 #include <cstring>
 #include <ctime>
 #include <optional>
+#include <mutex>
+#include <atomic> // Include for std::atomic
 
 #ifdef WIN32
 #include <corecrt.h>
@@ -18,6 +20,16 @@
 namespace Common {
     namespace Network {
 
+        // Static members for session ID management
+        static std::atomic<std::uint32_t> nextSessionId{ 1 }; // Atomic session ID
+        static std::mutex sessionIdMutex; // Optional if you use atomic
+
+        Session::Session(asio::io_context& io_context)
+            : m_socket(io_context) // Initialize the socket with io_context
+        {
+            m_id = nextSessionId.fetch_add(1); // Atomically assign a unique session ID
+        }
+
         void Session::asyncWrite(const Common::Network::Packet& message)
         {
             std::unique_lock lock(m_sendMutex);
@@ -27,12 +39,10 @@ namespace Common {
             lock.unlock();
 
             if (key == std::nullopt) {
-                Common::Parser::parse_cast(encryptedMessage.data(), message.getFullSize(), 13006, "server",
-                    "client");
+                // Common::Parser::parse_cast(encryptedMessage.data(), message.getFullSize(), 13006, "server","client");
             }
             else {
-                Common::Parser::parse(encryptedMessage.data(), message.getFullSize(), 13000, "server", "client",
-                    m_crypt.UserKey);
+                // Common::Parser::parse(encryptedMessage.data(), message.getFullSize(), 13000, "server", "client", m_crypt.UserKey);
             }
 
             bool expected = false, desired = true;
@@ -40,19 +50,6 @@ namespace Common {
             {
                 write();
             }
-            /*asio::async_write(m_socket, asio::buffer(encryptedMessage.data(), message.getFullSize()),
-                [&, self = this->shared_from_this()](const asio::error_code& errorCode, std::size_t)
-                {
-                    if (!errorCode)
-                    {
-                        //std::printf("Server message sent!\n");
-                    }
-                    else
-                    {
-                        std::printf("Failed to send server message: %s\n", errorCode.message().c_str());
-                    }
-                });
-                */
         }
 
         void Session::asyncRead() {
@@ -63,8 +60,14 @@ namespace Common {
 
             m_socket.async_read_some(asio::buffer(m_buffer.data(), m_buffer.size()),
                 [self = this->shared_from_this()](const asio::error_code& error, std::size_t bytes_transferred) {
+                    if (error) {
+                        std::printf("asyncRead Error: %s\n", error.message().c_str());
+                        self->closeSocket(); // Close the socket on error
+                        return; // Do not attempt to read again
+                    }
+
                     self->onRead(error, bytes_transferred);
-                    self->asyncRead();
+                    self->asyncRead(); // Continue reading
                 });
         }
 
@@ -101,64 +104,53 @@ namespace Common {
                 });
         }
 
-
-        void Session::onRead(asio::error_code error, std::size_t bytes_transferred)
-        {
-            if (!error)
-            {
-                const constexpr int headerSize = sizeof(Common::Protocol::TcpHeader);
-                m_reader.insert(m_reader.end(), m_buffer.begin(), m_buffer.begin() + bytes_transferred);
-
-                /*
-                if (!m_crypt.isUsed) Common::Parser::parse_cast(m_reader.data(), m_reader.size(), 13000, "client", "server");
-                if (m_crypt.isUsed) Common::Parser::parse(m_reader.data(), m_reader.size(), 13000, "client", "server", m_crypt.UserKey);
-                */
-                Common::Protocol::TcpHeader header;
-                Common::Cryptography::Crypt cryptography(0);
-                while (m_reader.size() > headerSize)
-                {
-                    if (m_crypt.isUsed)
-                    {
-                        cryptography.RC5Decrypt32(reinterpret_cast<int32_t*>(m_reader.data()), &header, headerSize);
-                    }
-                    else
-                    {
-#ifdef WIN32
-                        memcpy_s(&header, headerSize, m_reader.data(), headerSize);
-#else
-                        memcpy(&header, m_reader.data(), headerSize);
-#endif
-                    }
-
-                    if (header.getSize() >= 2047)
-                    {
-                        std::printf("Session::onRead() - Invalid packet size: %d\n", header.getSize());
-                        closeSocket();
-                        return;
-                    }
-
-                    if (m_reader.size() >= static_cast<std::size_t>(header.getSize()))
-                    {
-                        std::vector<std::uint8_t> data(m_reader.begin(), m_reader.begin() + header.getSize());
-                        onPacket(data);
-
-                        auto newSize = m_reader.size() - header.getSize();
-                        std::memmove(m_reader.data(), m_reader.data() + header.getSize(), newSize);
-                        m_reader.resize(newSize);
-                    }
-                    else
-                    {
-                        // avoid infinite loop
-                        break;
-                    }
-            }
-        }
-            else
-            {
+        void Session::onRead(asio::error_code error, std::size_t bytes_transferred) {
+            // Check for error in reading
+            if (error) {
                 std::printf("onRead() Error: %s\n", error.message().c_str());
                 closeSocket();
+                return;
             }
-    }
+
+            const constexpr int headerSize = sizeof(Common::Protocol::TcpHeader);
+            // Add the newly received bytes to the reader buffer
+            m_reader.insert(m_reader.end(), m_buffer.begin(), m_buffer.begin() + bytes_transferred);
+
+            Common::Protocol::TcpHeader header;
+            Common::Cryptography::Crypt cryptography(0);
+
+            // Process packets in the reader buffer
+            while (m_reader.size() >= headerSize) {
+                // Decrypt or copy the header based on the encryption state
+                if (m_crypt.isUsed) {
+                    cryptography.RC5Decrypt32(reinterpret_cast<int32_t*>(m_reader.data()), &header, headerSize);
+                }
+                else {
+                    std::memcpy(&header, m_reader.data(), headerSize);
+                }
+
+                // Validate packet size
+                if (header.getSize() >= 2047) {
+                    std::printf("Session::onRead() - Invalid packet size: %d\n", header.getSize());
+                    closeSocket();
+                    return;
+                }
+
+                // Ensure the entire packet is available in the buffer
+                if (m_reader.size() >= static_cast<std::size_t>(header.getSize())) {
+                    // Extract the complete packet
+                    std::vector<std::uint8_t> data(m_reader.begin(), m_reader.begin() + header.getSize());
+                    onPacket(data);  // Handle the complete packet
+
+                    // Remove the processed packet from the reader buffer
+                    m_reader.erase(m_reader.begin(), m_reader.begin() + header.getSize());
+                }
+                else {
+                    // Exit the loop if there's not enough data for a complete packet
+                    break;
+                }
+            }
+        }
 
         std::uint8_t* Session::encryptRawMessage(std::uint8_t* data, std::size_t size) {
             constexpr std::size_t headerSize = sizeof(Common::Protocol::TcpHeader);
@@ -228,8 +220,6 @@ namespace Common {
                     UniqueId uniqueId{};
                 } mainAck;
 
-                // This allows the ping to work for both cast and main server.
-                // This also sets the SessionID that the client will now use for this session's communication
                 mainAck.uniqueId.session = m_id;
                 mainAck.uniqueId.server = 4;
                 std::cout << "MainAck uniqueId.session: " << mainAck.uniqueId.session << std::endl;
@@ -237,8 +227,6 @@ namespace Common {
                 m_crypt.KeySetup(mainAck.key);
                 connectionAck.setData(reinterpret_cast<std::uint8_t*>(&mainAck), sizeof(MainAck));
                 connectionAck.setCommand(401, 0, static_cast<int>(Common::Enums::MAIN_SUCCESS), 1);
-                // nb. option = channel selected by user
-                // nb. success = e.g. MAIN_SUCCESS
                 asyncWrite(connectionAck);
                 break;
             }
@@ -259,6 +247,7 @@ namespace Common {
 
             asyncRead();
         }
+
         std::size_t Session::getId() const
         {
             return m_id;

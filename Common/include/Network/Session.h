@@ -8,13 +8,15 @@
 #include <functional>
 #include <utility>
 #include <type_traits>
+#include <stdexcept>
+#include <atomic>
+#include <mutex>
+#include <queue>
 
 #include "../Cryptography/Crypt.h"
 #include "../Enums/MiscellaneousEnums.h"
-
 #include "Packet.h"
 #include "SessionIdManager.h"
-#include <queue>
 
 namespace Common {
     namespace Network {
@@ -31,27 +33,26 @@ namespace Common {
             std::function<void(std::size_t)> m_onCloseSocketCallback{};
             std::size_t m_id = 0;
             std::queue<std::vector<std::uint8_t>> m_sendQueue;
-            std::atomic_bool m_isInSend;
+            std::atomic_bool m_isInSend{ false }; // Initialize directly
             std::mutex m_sendMutex;
+
             template<class T>
             inline static std::unordered_map<std::uint16_t, std::function<void(const Packet&, T&)>> callbacks;
-            inline static std::size_t id_counter = 1;
-            inline static SessionIdManager sessionIdManager{ 500 };
+
+            inline static SessionIdManager sessionIdManager{ 500 }; // ID Manager
 
         public:
-            Session() = default;
+            Session() = delete; // Disable default constructor
 
             explicit Session(tcp::socket&& socket, std::function<void(std::size_t)> fnct)
                 : m_socket{ std::move(socket) }
                 , m_onCloseSocketCallback{ fnct }
             {
                 auto newID = sessionIdManager.getNewSessionID();
-                if (newID.has_value())
-                {
+                if (newID.has_value()) {
                     m_id = newID.value();
                 }
-                else
-                {
+                else {
                     throw std::runtime_error("No available session IDs.");
                 }
             }
@@ -60,9 +61,9 @@ namespace Common {
                 sessionIdManager.releaseSessionID(m_id);
             }
 
-            void setSessionId(std::size_t id) {
-                m_id = id;
-            }
+            // No need for a separate setter, m_id is set in constructor
+
+            Session(asio::io_context& io_context);
 
             void asyncWrite(const Common::Network::Packet& message);
             void asyncRead();

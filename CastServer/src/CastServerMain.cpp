@@ -2,7 +2,9 @@
 #include <chrono>
 #include <string>
 #include <format>
-#include <asio/execution_context.hpp>
+#include <thread>
+#include <vector>
+#include <asio.hpp>
 #include "../include/CastServer.h"
 #include "../include/ConstantDatabase/CdbSingleton.h"
 #include "../include/ConstantDatabase/Structures/CdbMapInfo.h"
@@ -20,7 +22,6 @@ void printInitialInformation()
     using mapInfo = Common::ConstantDatabase::CdbSingleton<Common::ConstantDatabase::CdbMapInfo>;
     mapInfo::initialize(cdbItemInfoPath, cdbMapInfoName);
 
-    //Cast::Utils::initHeightDeaths(); // not working
     std::cout << "[Info] Constant database successfully initialized.\n";
 }
 
@@ -34,20 +35,14 @@ int main() {
     printInitialInformation();
     srv->asyncAccept();
 
-    auto workGuard = asio::make_work_guard(io_context);
+    std::vector<std::thread> threads;
 
-    const std::uint32_t numThreads = std::thread::hardware_concurrency();
-    std::vector<std::jthread> threads;
+    const std::size_t thread_count = std::thread::hardware_concurrency();
 
-    threads.reserve(numThreads);
-    for (std::uint32_t i = 0; i < numThreads; ++i) {
-        threads.emplace_back([&io_context] {
-            try {
-                io_context.run();
-            }
-            catch (const std::exception& e) {
-                std::cerr << "Error in io_context.run(): " << e.what() << std::endl;
-            }
+    for (std::size_t i = 0; i < thread_count; ++i) {
+        threads.emplace_back([&io_context]() {
+            asio::executor_work_guard<asio::io_context::executor_type> workGuard(io_context.get_executor());
+            io_context.run();
             });
     }
 

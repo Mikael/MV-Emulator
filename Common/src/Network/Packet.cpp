@@ -167,32 +167,33 @@ namespace Common
                 setData(nullptr, 0);
             }
 
-            //do printing here so I can filter based on orders
-            if (m_command.getOrder() == 71 || m_command.getOrder() == 72)// || m_command.getOrder() == 281)
-                return;
+            // Commented out the printing section
+            // if (m_command.getOrder() == 71 || m_command.getOrder() == 72) // || m_command.getOrder() == 281)
+            //     return;
 
-            std::cout << "\n\033[1;32m[ client -> server ]\033[1;36m";
-            std::cout << "\033[1;35mSize:" << size << "] \n";
-            Parser::printTcpHeader(m_header);
+            // std::cout << "\n\033[1;32m[ client -> server ]\033[1;36m";
+            // std::cout << "\033[1;35mSize:" << size << "] \n";
+            // Parser::printTcpHeader(m_header);
 
-            std::cout << "\033[1;37m";
-            for (std::size_t i = 0; i < m_header.getSize(); ++i)
-            {
-                printf("%02X ", static_cast<std::uint8_t>(data[i]));
-            }
-            std::cout << '\n';
-            std::cout << "\033[1;36mCommand Header:\n\033[1;35m";
-            std::cout << "[Mission:" << m_command.getMission() << "] \n";
-            std::cout << "[Order:" << m_command.getOrder() << "] \n";
-            std::cout << "[Extra:" << m_command.getExtra() << "] \n";
-            std::cout << "[Option:" << m_command.getOption() << "] \n";
-            std::cout << "[Padding:" << m_command.getBogus() << "] \n";
-            std::cout << "\033[1;36mDecrypted Packet:\n\033[1;37m";
-            for (std::size_t i = 0; i < m_header.getSize(); ++i)
-            {
-                printf("%02X ", static_cast<std::uint8_t>(decryptedBytes[i]));
-            }
+            // std::cout << "\033[1;37m";
+            // for (std::size_t i = 0; i < m_header.getSize(); ++i)
+            // {
+            //     printf("%02X ", static_cast<std::uint8_t>(data[i]));
+            // }
+            // std::cout << '\n';
+            // std::cout << "\033[1;36mCommand Header:\n\033[1;35m";
+            // std::cout << "[Mission:" << m_command.getMission() << "] \n";
+            // std::cout << "[Order:" << m_command.getOrder() << "] \n";
+            // std::cout << "[Extra:" << m_command.getExtra() << "] \n";
+            // std::cout << "[Option:" << m_command.getOption() << "] \n";
+            // std::cout << "[Padding:" << m_command.getBogus() << "] \n";
+            // std::cout << "\033[1;36mDecrypted Packet:\n\033[1;37m";
+            // for (std::size_t i = 0; i < m_header.getSize(); ++i)
+            // {
+            //     printf("%02X ", static_cast<std::uint8_t>(decryptedBytes[i]));
+            // }
         }
+
 
         std::vector<std::uint8_t> Packet::generateOutgoingPacket(std::optional<std::uint32_t> crypt_key) const
         {

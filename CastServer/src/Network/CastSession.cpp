@@ -30,14 +30,23 @@ namespace Cast
             incomingPacket.processIncomingPacket(data.data(), static_cast<std::uint16_t>(data.size()), std::nullopt);
 
             const std::uint16_t callbackNum = incomingPacket.getOrder();
+
+            // Check if callbackNum is 0
+            if (callbackNum == 0)
+            {
+                std::cerr << "[Session::onPacket] Ignored packet with order 0.\n";
+                return; // Early return without stopping the program
+            }
+
             if (!Common::Network::Session::callbacks<Session>.contains(callbackNum))
             {
-                std::cerr << "[CastSession] No callback for order: " << callbackNum << "\n";
+                std::cerr << "[Session] No callback for order: " << callbackNum << "\n";
                 return;
             }
 
             Common::Network::Session::callbacks<Session>[callbackNum](incomingPacket, *this);
         }
+
 
         void Session::setAccountInfo(const Main::Structures::AccountInfo& accountInfo)
         {
@@ -82,6 +91,16 @@ namespace Cast
         bool Session::isInMatch() const
         {
             return m_isInMatch;
+        }
+
+        void Session::updateMatchStatus(bool inMatch)
+        {
+            if (m_isInMatch != inMatch)
+            {
+                m_isInMatch = inMatch;  // Update the match status
+                std::cout << "Session ID: " << m_id << " is now " << (inMatch ? "in" : "not in") << " a match.\n";
+                //notifyMatchStatusChange(inMatch); 
+            }
         }
 
         void Session::setIsInMatch(bool val)

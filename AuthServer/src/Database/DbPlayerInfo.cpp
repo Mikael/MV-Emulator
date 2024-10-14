@@ -12,7 +12,7 @@
 #include "../../include/AuthServer.h"
 #include "../../include/Constants.h"
 
-bool removeAlreadyOnlinePlayer(std::uint32_t accountID)
+static bool removeAlreadyOnlinePlayer(std::uint32_t accountID)
 {
     asio::io_context ioContext;
     asio::ip::tcp::socket socket(ioContext);

@@ -217,6 +217,8 @@
     <ClInclude Include="include\ChatCommands\SimpleRoomCommands\UnmuteRoom.h" />
     <ClInclude Include="include\Classes\Player.h" />
     <ClInclude Include="include\Classes\RoomsManager.h" />
+    <ClInclude Include="include\Database\MainScheduler.h" />
+    <ClInclude Include="include\Database\ThreadPool.h" />
     <ClInclude Include="include\Handlers\LobbyClanListHandler.h" />
     <ClInclude Include="include\Handlers\Player\BlockedPlayers\BlockPlayerHandler.h" />
     <ClInclude Include="include\Handlers\Player\BlockedPlayers\BlockRemoveHandler.h" />
@@ -258,7 +260,6 @@
     <ClInclude Include="include\Handlers\Trade\TradeRemoveItemHandler.h" />
     <ClInclude Include="include\Network\AuthSession.h" />
     <ClInclude Include="include\Persistence\MainDatabaseManager.h" />
-    <ClInclude Include="include\Database\MainScheduler.h" />
     <ClInclude Include="include\Handlers\Item\BoughtItemHandler.h" />
     <ClInclude Include="include\Handlers\Player\Friends\FriendPlayersListHandler.h" />
     <ClInclude Include="include\Handlers\Player\InitialPlayerInfoHandlers.h" />

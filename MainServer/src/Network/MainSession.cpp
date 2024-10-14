@@ -16,6 +16,7 @@
 #include <functional>
 #include <chrono>
 #include <asio.hpp>
+#include <database/MainScheduler.h>
 std::map<std::uint16_t, std::size_t> errorLogCount;
 
 namespace Main
@@ -25,6 +26,8 @@ namespace Main
 		Session::Session(Main::Persistence::MainScheduler& scheduler, tcp::socket&& socket, std::function<void(std::size_t)> fnct)
 			: Common::Network::Session{ std::move(socket), fnct }
 			, m_scheduler{ scheduler }
+			, m_fnct{ fnct }  // Ensure that m_fnct is also initialized
+			// m_socket is already initialized by Common::Network::Session
 		{
 		}
 
@@ -32,6 +35,40 @@ namespace Main
 		{
 			return m_id;
 		}
+		//void Session::onPacket(std::vector<std::uint8_t>& data)
+		//{
+		//	std::optional<std::uint32_t> keyOpt;
+		//	if (m_crypt.isUsed) {
+		//		keyOpt = m_crypt.UserKey;
+		//	}
+
+		//	Common::Network::Packet incomingPacket;
+
+		//	try {
+		//		incomingPacket.processIncomingPacket(data.data(), static_cast<std::uint16_t>(data.size()), keyOpt);
+
+		//		const std::uint16_t callbackNum = incomingPacket.getOrder();
+		//		if (callbackNum == 0) {
+		//			return;
+		//		}
+		//		auto callbackIt = Common::Network::Session::callbacks<Session>.find(callbackNum);
+		//		if (callbackIt == Common::Network::Session::callbacks<Session>.end()) {
+		//			if (errorLogCount[callbackNum] < 5) {
+		//				std::cerr << "[MainSession] No callback for order: " << callbackNum << "\n";
+		//				errorLogCount[callbackNum]++;
+		//			}
+		//			return;
+		//		}
+
+		//		callbackIt->second(incomingPacket, *this);
+		//	}
+		//	catch (const std::exception& e) {
+		//		std::cerr << "[MainSession] Exception occurred while processing packet: " << e.what() << "\n";
+		//	}
+		//	catch (...) {
+		//		std::cerr << "[MainSession] Unknown exception occurred while processing packet.\n";
+		//	}
+		//}
 		void Session::onPacket(std::vector<std::uint8_t>& data)
 		{
 			std::optional<std::uint32_t> keyOpt;
@@ -46,17 +83,17 @@ namespace Main
 
 				const std::uint16_t callbackNum = incomingPacket.getOrder();
 				if (callbackNum == 0) {
-					return;
-				}
-				auto callbackIt = Common::Network::Session::callbacks<Session>.find(callbackNum);
-				if (callbackIt == Common::Network::Session::callbacks<Session>.end()) {
-					if (errorLogCount[callbackNum] < 5) {
-						std::cerr << "[MainSession] No callback for order: " << callbackNum << "\n";
-						errorLogCount[callbackNum]++;
-					}
-					return;
+					return; // Ignore packets with an order of 0
 				}
 
+				auto callbackIt = Common::Network::Session::callbacks<Session>.find(callbackNum);
+				if (callbackIt == Common::Network::Session::callbacks<Session>.end()) {
+					// Log and ignore unhandled packets
+					std::cerr << "[MainSession] No callback for order: " << callbackNum << "\n";
+					return; // Stop processing this packet but continue the program
+				}
+
+				// Call the registered callback
 				callbackIt->second(incomingPacket, *this);
 			}
 			catch (const std::exception& e) {
@@ -701,14 +738,19 @@ namespace Main
 			m_player.decreaseRoomNumber();
 		}
 
-		void Session::setIsInMatch(bool val)
+		void Main::Network::Session::setIsInMatch(bool val)
 		{
-			std::cout << "Set Is In Match set to: " << val << '\n';
-			m_player.setIsInMatch(val);
+			std::lock_guard<std::mutex> lock(m_mutex);  // Lock the mutex for thread safety
+			if (m_player.isInMatch() != val) {
+				std::cout << "Set Is In Match set to: " << val << " for sessionID: " << m_id << '\n';
+				m_player.setIsInMatch(val);
+			}
 		}
 
-		bool Session::isInMatch() const
+
+		bool Main::Network::Session::isInMatch() const
 		{
+			std::lock_guard<std::mutex> lock(m_mutex);  // Lock while reading the state
 			return m_player.isInMatch();
 		}
 

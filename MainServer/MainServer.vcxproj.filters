@@ -86,7 +86,6 @@
     <ClInclude Include="include\Handlers\Trade\TradeInitializationHandler.h" />
     <ClInclude Include="include\Handlers\Trade\TradeRemoveItemHandler.h" />
     <ClInclude Include="include\Persistence\MainDatabaseManager.h" />
-    <ClInclude Include="include\Database\MainScheduler.h" />
     <ClInclude Include="include\Handlers\Item\BoughtItemHandler.h" />
     <ClInclude Include="include\Handlers\Player\Friends\FriendPlayersListHandler.h" />
     <ClInclude Include="include\Handlers\Player\InitialPlayerInfoHandlers.h" />
@@ -142,5 +141,7 @@
     <ClInclude Include="include\Network\AuthSession.h" />
     <ClInclude Include="include\Structures\ClientData\Structures.h" />
     <ClInclude Include="include\Utilities.h" />
+    <ClInclude Include="include\Database\ThreadPool.h" />
+    <ClInclude Include="include\Database\MainScheduler.h" />
   </ItemGroup>
 </Project>

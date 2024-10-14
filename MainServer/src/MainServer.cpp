@@ -65,7 +65,7 @@ namespace Main
 		, m_authServerAcceptor{ io_context, tcp::endpoint(tcp::v4(), authPort) }
 		, m_serverId{ serverId }
 		, m_database{ "../ExternalLibraries/Database/GameDatabase.db" }
-		, m_scheduler{ 100, m_database }
+		, m_scheduler{ 25, m_database }
 		, m_timeSinceLastRestart{ Utils::IPCManager::getCurrentTimeInMilliseconds() }
 
 	{
@@ -101,18 +101,28 @@ namespace Main
 		Common::Network::Session::addCallback<Main::Network::Session>(71,
 			[&](const Common::Network::Packet& request, Main::Network::Session& session)
 			{
-				// Extract the ping data from the packet
-				Main::ClientData::Ping pingData;
-				if (request.getDataSize() >= sizeof(Main::ClientData::Ping))
+				// Ensure the packet has enough data for Ping structure
+				if (request.getDataSize() < sizeof(Main::ClientData::Ping))
 				{
-					// Copy the data from the packet into the pingData structure
-					std::memcpy(&pingData, request.getData(), sizeof(Main::ClientData::Ping));
+					std::cerr << "Received packet with insufficient data for Ping." << std::endl;
+					return; // Early exit if there's not enough data
 				}
 
-				// Call handlePing with the extracted data and other necessary parameters
-				Main::Handlers::handlePing(request, session, m_roomsManager, pingData);
+				// Extract the ping data directly
+				const Main::ClientData::Ping& pingData = *reinterpret_cast<const Main::ClientData::Ping*>(request.getData());
+
+				// Create a modified ping data
+				Main::ClientData::Ping modifiedPingData = pingData;
+
+				// Halve the ping value (ensuring it stays within bounds)
+				modifiedPingData.ping = static_cast<std::uint32_t>(modifiedPingData.ping / 2);
+
+				// Call handlePing with the modified data
+				Main::Handlers::handlePing(request, session, m_roomsManager, modifiedPingData);
 			}
 		);
+
+
 
 
 		Common::Network::Session::addCallback<Main::Network::Session>(74, [&](const Common::Network::Packet& request,

@@ -30,20 +30,18 @@ namespace Main
 			KICK_PLAYER = 28,
 		};
 
-
-		// Notifies other players that the player with uniqueId left the room (if you don't send this: the other player clients still believe you're in the room!)
-		// NOTE: This decrements all player indexes inside the client! Call it ONLY AFTER sending the packet to change the host!
+		// Notifies other players that the player with uniqueId left the room
 		inline void notifyRoomPlayerLeaves(Main::Structures::UniqueId uniqueId, Main::Classes::Room& room)
 		{
 			Common::Network::Packet response;
-			response.setTcpHeader(0, Common::Enums::USER_LARGE_ENCRYPTION); // sessionId set inside .broadcastToRoom()
+			response.setTcpHeader(0, Common::Enums::USER_LARGE_ENCRYPTION);
 			response.setOrder(422);
 			response.setOption(1); // Unsure whether this is the new hostIDX, or the team of the player that left!
 			response.setData(reinterpret_cast<std::uint8_t*>(&uniqueId), sizeof(uniqueId));
 			room.broadcastToRoom(response);
 		}
 
-		// Checked
+		// Handle player leaving the room
 		inline void handleRoomLeave(const Common::Network::Packet& request, Main::Network::Session& session, Main::Network::SessionsManager& sessionsManager, Main::Classes::RoomsManager& roomsManager)
 		{
 			Utils::Logger& logger = Utils::Logger::getInstance();
@@ -58,7 +56,7 @@ namespace Main
 				response.setExtra(RoomLeaveExtra::LEAVE_ERROR);
 				session.asyncWrite(response);
 				return;
-			};
+			}
 			auto& room = roomOpt->get();
 
 			if (request.getExtra() == ClientExtra::KICK_PLAYER)
@@ -70,8 +68,10 @@ namespace Main
 				auto* targetSession = sessionsManager.getSessionBySessionId(uniqueId.session);
 				if (targetSession)
 				{
-					if (targetSession->getAccountInfo().playerGrade >= session.getAccountInfo().playerGrade) return; // Add error messages, i.e. "cannot kick same or higher grade account"
-					room.removePlayer(targetSession, RoomLeaveExtra::LEAVE_KICKED_BY_HOST); // RemovePlayer also takes care of sending the packet to the client.
+					if (targetSession->getAccountInfo().playerGrade >= session.getAccountInfo().playerGrade)
+						return; // Prevent kicking same or higher grade accounts
+
+					room.removePlayer(targetSession, RoomLeaveExtra::LEAVE_KICKED_BY_HOST);
 					room.addKickedPlayer(targetSession->getAccountInfo().accountID);
 				}
 			}
@@ -79,13 +79,14 @@ namespace Main
 			{
 				response.setExtra(RoomLeaveExtra::LEAVE_NORMAL);
 
-				// If there are no players left after this player left, or if there were errors while switching to a new host, just close the room to avoid further issues.
-				const bool mustRoomBeClosed = room.removePlayer(&session, RoomLeaveExtra::LEAVE_NORMAL);
-				// nb. removePlayer does NOT notify cast server whether room must be closed, so we do it here.
-
-				if (mustRoomBeClosed)
+				if (room.isSessionInList(&session))
 				{
-					roomsManager.removeRoom(room.getRoomNumber());
+					const bool mustRoomBeClosed = room.removePlayer(&session, RoomLeaveExtra::LEAVE_NORMAL);
+
+					if (mustRoomBeClosed)
+					{
+						roomsManager.removeRoom(room.getRoomNumber());
+					}
 				}
 			}
 		}

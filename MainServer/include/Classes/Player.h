@@ -62,7 +62,6 @@ namespace Main
 
 			// Other
 			std::uint16_t m_roomNumber{};
-			bool m_isInMatch{};
 			mutable std::uint64_t m_latestItemNumber{};
 			std::uint32_t m_batteryObtainedInMatch{};
 
@@ -77,6 +76,7 @@ namespace Main
 			void storeBatteryObtainedInMatch();
 			const AccountInfo& getAccountInfo() const;
 			std::uint32_t getAccountID() const;
+			bool m_isInMatch{ false };
 			const char* const getPlayerName() const;
 			void setAccountRockTotens(std::uint32_t rt);
 			void setAccountMicroPoints(std::uint32_t mp);

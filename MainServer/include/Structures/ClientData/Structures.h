@@ -10,9 +10,11 @@ namespace Main
 #pragma pack(push, 1)
 		struct Ping
 		{
-			std::uint32_t unused : 10 = 0; // recheck whether this really is unused
-			std::uint32_t ping : 10 = 0;
-			std::uint32_t rest : 12 = 0;
+			std::uint32_t unused : 10; // 10 bits for unused
+			std::uint32_t ping : 10;   // 10 bits for ping
+			std::uint32_t rest : 12;   // 12 bits for additional data
+
+			Ping() : unused(0), ping(0), rest(0) {} // Constructor to initialize fields
 		};
 #pragma pack(pop)
 

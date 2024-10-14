@@ -8,7 +8,6 @@
 #include <ctime>
 #include <string>
 #include <sstream>
-#include <format>
 #include <memory>
 
 namespace Utils
@@ -30,30 +29,27 @@ namespace Utils
         std::ostream& outputStream;
         std::ofstream fileStream;
 
-        // Private constructor
         Logger(bool enableLogging = true, bool logToConsole = true, const std::string& filename = "log.txt")
             : m_loggingEnabled(enableLogging), logToFile(!logToConsole)
             , outputStream(logToConsole ? std::cout : fileStream)
         {
             if (logToFile)
             {
-               /* fileStream.open(filename, std::ios_base::app);
+                fileStream.open(filename, std::ios_base::app);
                 if (!fileStream.is_open())
                 {
                     std::cerr << "Error opening log file " << filename << '\n';
-                }*/
+                }
             }
         }
 
-        // Disable copy constructor and assignment operator
         Logger(const Logger&) = delete;
         Logger& operator=(const Logger&) = delete;
 
-        // Destructor
         ~Logger() {
             if (logToFile)
             {
-                //fileStream.close();
+                fileStream.close();
             }
         }
 
@@ -64,33 +60,31 @@ namespace Utils
         {
             if (!instance)
             {
-                instance = new Logger(enableLogging, true, filename);
+                instance = new Logger(enableLogging, logToConsole, filename);
             }
             return *instance;
         }
 
-        void enableLogging()
-        {
-            m_loggingEnabled = true;
-        }
-
-        void disableLogging()
-        {
-            m_loggingEnabled = false;
-        }
+        void enableLogging() { m_loggingEnabled = true; }
+        void disableLogging() { m_loggingEnabled = false; }
 
         template<LogDestination LogDest = LogDestination::Console>
         void log(const std::string& message, LogType type = LogType::Normal, const std::string& functionName = "")
         {
             if (m_loggingEnabled)
             {
-                std::string logMessage = message;
+                std::string logMessage = getCurrentDateTime() + " " + message;
                 if (!functionName.empty())
                 {
                     logMessage = "[" + functionName + "] " + logMessage;
                 }
                 logImpl<LogDest>(logMessage, type);
             }
+        }
+
+        void logError(const std::string& message, const std::string& functionName = "")
+        {
+            log<LogDestination::Console>(message, LogType::Error, functionName);
         }
 
     private:
@@ -101,22 +95,22 @@ namespace Utils
             {
                 switch (type) {
                 case LogType::Info:
-                    std::cout << "[Info] " << message << "\n\n";
+                    std::cout << "[Info] " << message << "\n";
                     break;
                 case LogType::Error:
-                    std::cout << "[Error] " << message << "\n\n";
+                    std::cout << "[Error] " << message << "\n";
                     break;
                 case LogType::Normal:
-                    std::cout << message << "\n\n";
+                    std::cout << message << "\n";
                     break;
                 case LogType::Warning:
-                    std::cout << "[Warning] " << message << "\n\n";
+                    std::cout << "[Warning] " << message << "\n";
                     break;
                 }
             }
             else
             {
-                //fileStream << getCurrentDateTime() << " [" << logTypeToString(type) << "] " << message << "\n";
+                fileStream << getCurrentDateTime() << " [" << logTypeToString(type) << "] " << message << "\n";
             }
         }
 
