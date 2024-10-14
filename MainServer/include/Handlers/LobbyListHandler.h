@@ -41,6 +41,7 @@ namespace Main
                 singlePlayerList.uniqueId.server = partialAccountData.uniqueId.server;
                 singlePlayerList.uniqueId.session = partialAccountData.uniqueId.session;
                 singlePlayerList.uniqueId.unknown = partialAccountData.uniqueId.unknown;
+
                 playerList.push_back(singlePlayerList);
             }
 

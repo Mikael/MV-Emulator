@@ -9,75 +9,75 @@
 #include "../../../include/Network/MainSession.h"
 #include "../../../include/Network/MainSessionManager.h"
 
+
 namespace Main
 {
-    namespace Handlers
-    {
-        inline void handleAccountInformation(const Common::Network::Packet& request, Main::Network::Session& session,
-            Main::Network::SessionsManager& sessionsManager, Main::Persistence::PersistentDatabase& database,
-            Main::Structures::AccountInfo& accountInfo, std::uint64_t timeSinceLastServerRestart, std::uint32_t extra = 1)
-        {
-            Common::Network::Packet response;
-            response.setTcpHeader(request.getSession(), Common::Enums::USER_LARGE_ENCRYPTION);
-            response.setOrder(413);
-            response.setExtra(extra);
+	namespace Handlers
+	{
+		inline void handleAccountInformation(const Common::Network::Packet& request, Main::Network::Session& session,
+			Main::Network::SessionsManager& sessionsManager, Main::Persistence::PersistentDatabase& database, Main::Structures::AccountInfo& accountInfo,
+			std::uint64_t timeSinceLastServerRestart, std::uint32_t extra = 1)
+		{
+			Common::Network::Packet response;
+			response.setTcpHeader(request.getSession(), Common::Enums::USER_LARGE_ENCRYPTION);
+			response.setOrder(413);
+			response.setExtra(extra);
 
-            // AccountInfo closure packet
-            if (extra == 59)
-            {
-                static std::array<std::uint8_t, 28> unused = {}; // Use a static array initialized to zero
-                response.setData(unused.data(), unused.size());
-                session.asyncWrite(response);
-                return;
-            }
+			// AccountInfo closure packet
+			if (extra == 59)
+			{
+				std::vector<std::uint8_t> unused(28);
+				for (std::size_t i = 0; i < unused.size(); ++i) unused[i] = 0;
+				response.setData(unused.data(), 28);
+				session.asyncWrite(response);
+				return;
+			}
 
-            accountInfo.uniqueId.session = session.getId();
-            accountInfo.uniqueId.server = 4; // currently hardcoded
-            accountInfo.serverTime = accountInfo.getUtcTimeMs() - timeSinceLastServerRestart;
+			accountInfo.uniqueId.session = session.getId();
+			accountInfo.uniqueId.server = 4; // currently hardcoded
+			accountInfo.serverTime = accountInfo.getUtcTimeMs() - timeSinceLastServerRestart;
+			// accountInfo.setServerTime();
 
-            response.setData(reinterpret_cast<std::uint8_t*>(&accountInfo), sizeof(accountInfo));
-            session.asyncWrite(response);
-            session.setAccountInfo(accountInfo);
-            sessionsManager.addSession(&session);
+			response.setData(reinterpret_cast<std::uint8_t*>(&accountInfo), sizeof(accountInfo));
+			session.asyncWrite(response);
+			session.setAccountInfo(accountInfo);
+			sessionsManager.addSession(&session);
 
-            // Load the user's friend list and blocked players from the database
-            auto friends = database.loadFriends(accountInfo.accountID);
-            session.setFriendList(friends);
+			// Load the user's friendlist from the database
+			auto friends = database.loadFriends(accountInfo.accountID);
 
-            // Find all the online friends and set them
-            for (const auto& currentFriend : friends)
-            {
-                if (auto targetSession = sessionsManager.getSessionByAccountId(currentFriend.targetAccountId))
-                {
-                    // Notify online friends
-                    session.updateFriendSession(targetSession);
-                    targetSession->updateFriendSession(&session);
-                    targetSession->logFriend(46, accountInfo.accountID);
-                }
-            }
+			// Set the user's friendlist
+			session.setFriendList(friends);
 
-            session.setBlockedPlayers(database.loadBlockedPlayers(accountInfo.accountID));
-            session.setMute(database.isMuted(accountInfo.accountID));
+			// Find all the online friends and set them
+			for (const auto& currentFriend : friends)
+			{
+				if (Main::Network::Session* targetSession = sessionsManager.getSessionByAccountId(currentFriend.targetAccountId))
+				{
+					// This friend is online. Notify them that we're online
+					session.updateFriendSession(targetSession);
+					targetSession->updateFriendSession(sessionsManager.getSessionByAccountId(accountInfo.accountID));
+					targetSession->logFriend(46, accountInfo.accountID);
+				}
+			}
 
-            // Load mailboxes only once
-            auto mailboxReceived = database.loadMailboxes(accountInfo.accountID, true);
-            auto mailboxSent = database.loadMailboxes(accountInfo.accountID, false);
-            session.setMailbox(mailboxReceived, true);
-            session.setMailbox(mailboxSent, false);
+			session.setBlockedPlayers(database.loadBlockedPlayers(accountInfo.accountID));
+			session.setMute(database.isMuted(accountInfo.accountID));
+			session.setMailbox(database.loadMailboxes(accountInfo.accountID, true), true);
+			session.setMailbox(database.loadMailboxes(accountInfo.accountID, false), false);
+			session.setOnlineDatabaseStatus();
 
-            // Check for new mailboxes
-            auto newMailboxes = database.getNewMailboxes(accountInfo.accountID);
-            if (!newMailboxes.empty())
-            {
-                // Send online messages (mailbox) if there are new ones
-                response.setOrder(104);
-                response.setOption(newMailboxes.size());
-                response.setExtra(Main::Enums::MailboxExtra::MAILBOX_RECEIVED);
-                response.setData(reinterpret_cast<std::uint8_t*>(newMailboxes.data()), newMailboxes.size() * sizeof(Main::Structures::Mailbox));
-                session.asyncWrite(response);
-            }
-        }
-    }
+			auto newMailboxes = database.getNewMailboxes(accountInfo.accountID);
+			if (newMailboxes.empty()) return;
+			// Send online messages (mailbox) if there are new ones
+			response.setOrder(104);
+			response.setOption(newMailboxes.size());
+			response.setExtra(Main::Enums::MailboxExtra::MAILBOX_RECEIVED);
+			response.setData(reinterpret_cast<std::uint8_t*>(newMailboxes.data()), newMailboxes.size() * sizeof(Main::Structures::Mailbox));
+			session.asyncWrite(response);
+
+		}
+	}
 }
 
 #endif

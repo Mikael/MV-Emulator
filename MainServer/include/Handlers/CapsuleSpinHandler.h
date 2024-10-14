@@ -42,24 +42,21 @@ namespace Main
 			constexpr const double priceFactor = 0.2;
 
 			std::vector<std::pair<std::pair<std::uint32_t, std::uint32_t>, double>> itemProbabilities;
-			itemProbabilities.reserve(items.size()); // Reserve memory
-
 			for (const auto& item : items)
 			{
 				double probability = static_cast<double>(item.gi_prob) / maxProbability * 100.0;
-				if (gi_price > averageSpinCostByCurrency[gi_type])
+				if (gi_price > averageSpinCostByCurrency[gi_type] && item.gi_type == 1) // Increase chance for rare
 				{
-					probability *= (item.gi_type == 1) ? (1.0 + priceFactor) : 1.0; // Increase chance for rare
+					probability *= (1.0 + priceFactor);
 				}
-				else if (gi_price < averageSpinCostByCurrency[gi_type])
+				else if (gi_price < averageSpinCostByCurrency[gi_type] && item.gi_type == 1) // decrease chance for rare
 				{
-					probability *= (item.gi_type == 1) ? (1.0 - priceFactor) : 1.0; // Decrease chance for rare
+					probability *= (1.0 - priceFactor);
 				}
 				itemProbabilities.emplace_back(std::pair{ item.gi_itemid, item.gi_type }, probability);
 			}
 
 			std::vector<double> probabilities;
-			probabilities.reserve(itemProbabilities.size()); // Reserve memory
 			for (const auto& pair : itemProbabilities)
 			{
 				probabilities.push_back(pair.second);
@@ -76,17 +73,17 @@ namespace Main
 		inline void removeCurrencyByCapsuleType(Main::Network::Session& session, const Main::Structures::AccountInfo& accountInfo, CapsuleCurrencyType capsuleCurrencyType,
 			std::uint32_t toRemove)
 		{
-			switch (capsuleCurrencyType)
+			if (capsuleCurrencyType == CapsuleCurrencyType::COINS)
 			{
-			case CapsuleCurrencyType::COINS:
 				session.setAccountCoins(accountInfo.coins - toRemove);
-				break;
-			case CapsuleCurrencyType::ROCKTOTENS:
+			}
+			else if (capsuleCurrencyType == CapsuleCurrencyType::ROCKTOTENS)
+			{
 				session.setAccountRockTotens(accountInfo.rockTotens - toRemove);
-				break;
-			case CapsuleCurrencyType::MICROPOINTS:
+			}
+			else
+			{
 				session.setAccountMicroPoints(accountInfo.microPoints - toRemove);
-				break;
 			}
 		}
 
@@ -98,7 +95,6 @@ namespace Main
 				std::uint32_t currencySpent{};
 				std::uint64_t unknown{};
 			} receivedRequest;
-
 			std::memcpy(&receivedRequest, request.getData(), sizeof(receivedRequest));
 
 			Common::Network::Packet response;
@@ -106,11 +102,11 @@ namespace Main
 			response.setOrder(request.getOrder());
 			response.setMission(CapsuleSpinMission::NORMAL_SPIN);
 			response.setExtra(CapsuleSpinExtra::SPIN_SUCCESS);
-			response.setOption(1); // Number of items per spin (e.g., 2 if we want to add additional coupon)
+			response.setOption(1); // number of items per spin (e.g 2 if we want to add addiitonal coupon)
 
 			Main::ConstantDatabase::CdbUtil cdbUtil;
-			auto capsuleInfo = cdbUtil.getCapsuleInfoById(receivedRequest.capsuleId);
-			if (!capsuleInfo)
+			const auto& capsuleInfo = cdbUtil.getCapsuleInfoById(receivedRequest.capsuleId);
+			if (capsuleInfo == std::nullopt)
 			{
 				response.setExtra(CapsuleSpinExtra::FAIL);
 				response.setMission(1);
@@ -119,15 +115,13 @@ namespace Main
 			}
 
 			const auto& accountInfo = session.getAccountInfo();
-			const auto capsulePrice = capsuleInfo->gi_price * request.getOption();
-			const auto capsuleCurrencyType = capsuleInfo->gi_type;
 
-			if ((capsuleCurrencyType == CapsuleCurrencyType::COINS && accountInfo.coins < capsulePrice) ||
-				(capsuleCurrencyType == CapsuleCurrencyType::ROCKTOTENS && accountInfo.rockTotens < capsulePrice) ||
-				(capsuleCurrencyType == CapsuleCurrencyType::MICROPOINTS && accountInfo.microPoints < capsulePrice))
+			if (capsuleInfo->gi_type == CapsuleCurrencyType::COINS && accountInfo.coins < capsuleInfo->gi_price * request.getOption()
+				|| capsuleInfo->gi_type == CapsuleCurrencyType::ROCKTOTENS && accountInfo.rockTotens < capsuleInfo->gi_price * request.getOption()
+				|| capsuleInfo->gi_type == CapsuleCurrencyType::MICROPOINTS && accountInfo.microPoints < capsuleInfo->gi_price * request.getOption())
 			{
 				response.setExtra(CapsuleSpinExtra::NOT_ENOUGH_CURRENCY);
-				response.setOption(capsuleCurrencyType);
+				response.setOption(capsuleInfo->gi_type);
 				session.asyncWrite(response);
 				return;
 			}
@@ -154,31 +148,27 @@ namespace Main
 				{
 					response.setMission(CapsuleSpinMission::NORMAL_SPIN);
 				}
-
 				capsuleSpin.itemSerialInfo.itemNumber = session.getLatestItemNumber() + 1;
 				session.setLatestItemNumber(capsuleSpin.itemSerialInfo.itemNumber);
-				const auto wonItemIdAndType = itemSelectionAlgorithm(cdbUtil, capsuleInfo->gi_infoid, capsuleInfo->gi_price, capsuleCurrencyType);
+				const std::pair<std::uint32_t, std::uint32_t> wonItemIdAndType = itemSelectionAlgorithm(cdbUtil, capsuleInfo->gi_infoid, capsuleInfo->gi_price, capsuleInfo->gi_type);
 				capsuleSpin.winItemId = wonItemIdAndType.first;
 				cdbUtil.setItemId(capsuleSpin.winItemId);
-
-				if (!cdbUtil.getItemDurability())
+				if (cdbUtil.getItemDurability() == std::nullopt)
 				{
 					response.setExtra(CapsuleSpinExtra::FAIL);
 					response.setMission(1);
 					session.asyncWrite(response);
 					return;
 				}
-
 				Main::Structures::Item item;
 				item.durability = *cdbUtil.getItemDurability();
 				item.expirationDate = *cdbUtil.getItemDuration();
 				item.serialInfo = capsuleSpin.itemSerialInfo;
 				item.id = capsuleSpin.winItemId;
-
 				response.setData(reinterpret_cast<std::uint8_t*>(&capsuleSpin), sizeof(Main::Structures::CapsuleSpin));
 				session.asyncWrite(response);
 				session.addItem(item);
-				response.setOption(static_cast<CapsuleCurrencyType>(capsuleInfo->gi_type)); // Cast to CapsuleCurrencyType
+				removeCurrencyByCapsuleType(session, accountInfo, static_cast<CapsuleCurrencyType>(capsuleInfo->gi_type), capsuleInfo->gi_price);
 
 				if (response.getMission() != 0)
 				{
@@ -190,4 +180,4 @@ namespace Main
 	}
 }
 
-#endif // CAPSULE_SPIN_HANDLER_H
+#endif
