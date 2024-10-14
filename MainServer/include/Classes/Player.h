@@ -115,6 +115,7 @@ namespace Main
 			const std::unordered_map<std::uint64_t, EquippedItem>& getEquippedItems() const;
 			const std::unordered_map<std::uint64_t, Item>& getItems() const;
 			const std::vector<Item> getItemsAsVec() const;
+			bool deleteItem(const Main::Structures::ItemSerialInfo& itemSerialInfo);
 			bool deleteItemBasic(const Main::Structures::ItemSerialInfo& itemSerialInfo);
 			void addItems(const std::vector<Item>& items);
 			void addItem(const Item& item);

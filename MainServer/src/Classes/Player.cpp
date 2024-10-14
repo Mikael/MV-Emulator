@@ -313,6 +313,16 @@ namespace Main
 			}
 			return items;
 		}
+		bool Player::deleteItem(const Main::Structures::ItemSerialInfo& itemSerialInfo)
+		{
+			for (auto it = m_itemsByItemNumber.begin(); it != m_itemsByItemNumber.end(); ++it)
+			{
+				
+					m_itemsByItemNumber.erase(it);
+					return true;
+			}
+			return false;
+		}
 
 		bool Player::deleteItemBasic(const Main::Structures::ItemSerialInfo& itemSerialInfo)
 		{
@@ -426,14 +436,30 @@ namespace Main
 
 		void Player::equipItem(const std::uint16_t itemNumber, Main::Persistence::MainScheduler& scheduler)
 		{
+			// Check if the item exists in the inventory
 			if (m_itemsByItemNumber.find(itemNumber) == m_itemsByItemNumber.end())
 			{
-				std::cout << "Item Number " << itemNumber << " does not exist.\n";
-				return;
+				std::cout << "Item Number " << itemNumber << " does not exist. Deleting from inventory...\n";
+
+				// Create a serial info object to delete the item
+				Main::Structures::ItemSerialInfo itemSerialInfoToDelete = { itemNumber };
+
+				// Call deleteItemBasic to remove the illegal item
+				if (deleteItem(itemSerialInfoToDelete))
+				{
+					std::cout << "Illegal item deleted from inventory.\n";
+				}
+				else
+				{
+					std::cout << "Failed to delete illegal item from inventory.\n";
+				}
+				return; // Exit if the item doesn't exist
 			}
 
+			// Proceed to equip the item since it exists
 			EquippedItem equippedItem = EquippedItem{ m_itemsByItemNumber[itemNumber] };
 
+			// Logic for equipping set items
 			if (equippedItem.type == Common::Enums::ItemType::SET)
 			{
 				std::cout << "User Equipping Set. Unequipping Parts Relative To Set...\n";
@@ -452,6 +478,7 @@ namespace Main
 
 			auto& itemMap = m_equippedItemByCharacter[m_accountInfo.latestSelectedCharacter];
 
+			// Logic for unequipping already equipped items
 			auto equippedSetIt = itemMap.find(Common::Enums::ItemType::SET);
 			if (equippedSetIt != itemMap.end())
 			{
@@ -473,24 +500,32 @@ namespace Main
 				}
 			}
 
+			// Remove the item from the inventory since it is being equipped
 			m_itemsByItemNumber.erase(itemNumber);
 
+			// Logic for unequipping any existing equipped item of the same type
 			auto equippedIt = itemMap.find(equippedItem.type);
 			if (equippedIt != itemMap.end())
 			{
 				std::cout << "Unequipping Item...\n";
 				auto toUnequipItemNumber = equippedIt->second.serialInfo.itemNumber;
 
+				// Re-add the unequipped item back to inventory
 				m_itemsByItemNumber[toUnequipItemNumber] = Item{ equippedIt->second };
-				itemMap.erase(equippedIt); 
+				itemMap.erase(equippedIt);
 			}
 
+			// Equip the new item
 			itemMap[equippedItem.type] = equippedItem;
 			++m_totalEquippedItems;
 
+			// Schedule a callback to persist the equipped item state
 			scheduler.addRepetitiveCallback(m_accountInfo.accountID, &Main::Persistence::PersistentDatabase::equipItem,
 				m_accountInfo.accountID, static_cast<std::uint64_t>(equippedItem.serialInfo.itemNumber), static_cast<std::uint16_t>(m_accountInfo.latestSelectedCharacter));
 		}
+
+
+
 
 
 		std::optional<std::uint64_t> Player::unequipItem(std::uint64_t itemType, Main::Persistence::MainScheduler& scheduler)

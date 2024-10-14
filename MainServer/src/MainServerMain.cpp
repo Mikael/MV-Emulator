@@ -2,6 +2,8 @@
 #include <chrono>
 #include <format>
 #include <asio/execution_context.hpp>
+#include <asio/thread_pool.hpp>
+#include <thread>
 #include "../include/MainServer.h"
 #include "../include/Structures/AccountInfo/MainAccountInfo.h"
 #include "../include/ConstantDatabase/CdbSingleton.h"
@@ -72,12 +74,21 @@ int main()
     srv->asyncAccept();
     srv->asyncAcceptAuthServer();
 
-    // Run the io_context in the main thread
-    try {
-        io_context.run();
+    // Create a thread pool for handling IO work
+    const unsigned numThreads = std::thread::hardware_concurrency();
+    std::vector<std::thread> threads;
+
+    for (unsigned i = 0; i < numThreads; ++i)
+    {
+        threads.emplace_back([&io_context]() {
+            io_context.run();
+            });
     }
-    catch (const std::exception& e) {
-        std::cerr << "Error in io_context.run(): " << e.what() << std::endl;
+
+    // Wait for all threads to finish
+    for (auto& thread : threads)
+    {
+        thread.join();
     }
 
     std::cout << "Server shutting down...\n";
