@@ -161,11 +161,10 @@ namespace Main
             void storeEndMatchStats(const Main::Structures::ScoreboardResponse& stats, Main::Enums::MatchEnd matchEnd, bool hasLeveledUp);
 
         private:
-            std::uint32_t m_id; // Session ID
-            Main::Classes::Player m_player; // Player associated with the session
-            Main::Persistence::MainScheduler& m_scheduler; // Reference to the main scheduler
-            std::chrono::time_point<std::chrono::high_resolution_clock> m_lastPingUpdate; // Last ping update time
-            mutable std::mutex m_mutex;  // Mutex to protect the state
+            Main::Classes::Player m_player;
+            Main::Persistence::MainScheduler& m_scheduler;
+            std::chrono::time_point<std::chrono::high_resolution_clock> m_lastPingUpdate;
+            mutable std::mutex m_mutex;
             std::function<void(std::size_t)> m_fnct;
 
         };

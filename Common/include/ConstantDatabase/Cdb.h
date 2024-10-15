@@ -222,7 +222,7 @@ namespace Common
 			}
 
 			template<typename... S>
-			requires (std::same_as<S, T> and ...)
+				requires (std::same_as<S, T> and ...)
 			constexpr void addEntries(const S&... s)
 			{
 				(add_entry(s), ...);

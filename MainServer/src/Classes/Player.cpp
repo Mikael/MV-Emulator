@@ -1,6 +1,5 @@
 
 #include "../../include/Classes/Player.h"
-
 #include <unordered_map>
 #include <vector>
 
@@ -30,15 +29,7 @@ namespace Main
 				m_equippedItemByCharacter.emplace(characterID, std::unordered_map<std::uint64_t, EquippedItem>{});
 			}
 		}
-		void Player::setPing(std::uint16_t ping)
-		{
-			m_ping = ping;
-		}
 
-		std::uint16_t Player::getPing() const
-		{
-			return m_ping;
-		}
 		void Player::setAccountInfo(const AccountInfo& accountInfo)
 		{
 			m_accountInfo = accountInfo;
@@ -67,6 +58,16 @@ namespace Main
 		const AccountInfo& Player::getAccountInfo() const
 		{
 			return m_accountInfo;
+		}
+
+		void Player::setPing(std::uint16_t ping)
+		{
+			m_ping = ping;
+		}
+
+		std::uint16_t Player::getPing() const
+		{
+			return m_ping;
 		}
 
 		std::uint32_t Player::getAccountID() const
@@ -269,29 +270,26 @@ namespace Main
 
 		bool Player::replaceItem(const std::uint32_t itemNum, const Main::Structures::ItemSerialInfo& newItemSerialInfo, std::uint64_t newExpiration)
 		{
-			auto itemIt = m_itemsByItemNumber.find(itemNum);
-			if (itemIt != m_itemsByItemNumber.end())
+			bool found = false;
+			if (m_itemsByItemNumber.contains(itemNum))
 			{
-				itemIt->second.serialInfo = newItemSerialInfo;
-				return true;
+				m_itemsByItemNumber[itemNum].serialInfo = newItemSerialInfo;
+				found = true;
 			}
-
-			auto characterIt = m_equippedItemByCharacter.find(m_accountInfo.latestSelectedCharacter);
-			if (characterIt != m_equippedItemByCharacter.end())
+			else
 			{
-				for (auto& [itemType, item] : characterIt->second)
+				for (auto& [itemType, item] : m_equippedItemByCharacter.at(m_accountInfo.latestSelectedCharacter))
 				{
 					if (item.serialInfo.itemNumber == itemNum)
 					{
-						item.serialInfo = newItemSerialInfo; 
-						return true; 
+						item.serialInfo = newItemSerialInfo;
+						found = true;
+						break;
 					}
 				}
 			}
-
-			return false;
+			return found;
 		}
-
 
 		const std::unordered_map<std::uint64_t, EquippedItem>& Player::getEquippedItems() const
 		{
@@ -312,16 +310,6 @@ namespace Main
 				items.push_back(item);
 			}
 			return items;
-		}
-		bool Player::deleteItem(const Main::Structures::ItemSerialInfo& itemSerialInfo)
-		{
-			for (auto it = m_itemsByItemNumber.begin(); it != m_itemsByItemNumber.end(); ++it)
-			{
-				
-					m_itemsByItemNumber.erase(it);
-					return true;
-			}
-			return false;
 		}
 
 		bool Player::deleteItemBasic(const Main::Structures::ItemSerialInfo& itemSerialInfo)
@@ -512,23 +500,19 @@ namespace Main
 		{
 			auto& itemMap = m_equippedItemByCharacter[m_accountInfo.latestSelectedCharacter];
 
-			auto it = itemMap.find(itemType);
-			if (it == itemMap.end())
+			if (!itemMap.contains(itemType))
 			{
 				std::cout << "Item NOT unequipped!\n";
 				return std::nullopt;
 			}
+			std::uint64_t itemNumber = itemMap.at(itemType).serialInfo.itemNumber;
 
-			std::uint64_t itemNumber = it->second.serialInfo.itemNumber;
-			m_itemsByItemNumber[itemNumber] = Item{ it->second };
-
-			itemMap.erase(it);
+			m_itemsByItemNumber[itemNumber] = Item{ itemMap.at(itemType) };
+			itemMap.erase(itemType);
 			--m_totalEquippedItems;
-
 			std::cout << "Item Unequipped\n";
 			return itemNumber;
 		}
-
 
 		std::uint64_t Player::getTotalEquippedItems() const
 		{
@@ -550,14 +534,15 @@ namespace Main
 			std::array<std::uint32_t, 10> equippedPlayerItems{};
 			std::array<std::uint32_t, 7> equippedPlayerWeapons{};
 
-			const auto& itemMap = m_equippedItemByCharacter.at(m_accountInfo.latestSelectedCharacter);
+			auto& itemMap = m_equippedItemByCharacter.at(m_accountInfo.latestSelectedCharacter);
 
-			if (auto setItemIt = itemMap.find(Common::Enums::SET); setItemIt != itemMap.end())
+			// Set is a special case
+			if (itemMap.contains(Common::Enums::SET))
 			{
 				using setItems = Common::ConstantDatabase::CdbSingleton<Common::ConstantDatabase::SetItemInfo>;
-				const auto setItemId = setItemIt->second.id >> 1;
-
-				if (auto entry = setItems::getInstance().getEntry("si_id", setItemId); entry != std::nullopt)
+				const auto& setItemId = itemMap.at(Common::Enums::SET).id >> 1;
+				auto entry = setItems::getInstance().getEntry("si_id", setItemId);
+				if (entry != std::nullopt)
 				{
 					for (const auto& currentTypeNotNull : Common::Utils::getPartTypesWhereSetItemInfoTypeNotNull(*entry))
 					{
@@ -565,26 +550,22 @@ namespace Main
 					}
 				}
 			}
-
 			for (std::size_t i = 0; i < equippedPlayerItems.size(); ++i)
 			{
-				if (auto it = itemMap.find(i); it != itemMap.end())
+				if (itemMap.contains(i))
 				{
-					equippedPlayerItems[i] = it->second.id >> 1;
+					equippedPlayerItems[i] = itemMap.at(i).id >> 1;
 				}
 			}
-
 			for (std::size_t i = 0; i < equippedPlayerWeapons.size(); ++i)
 			{
-				if (auto it = itemMap.find(i + 10); it != itemMap.end())
+				if (itemMap.contains(i + 10))
 				{
-					equippedPlayerWeapons[i] = it->second.id >> 1;
+					equippedPlayerWeapons[i] = itemMap.at(i + 10).id >> 1;
 				}
 			}
-
-			return { equippedPlayerItems, equippedPlayerWeapons };
+			return std::pair{ equippedPlayerItems, equippedPlayerWeapons };
 		}
-
 
 		void Player::blockAccount(std::uint32_t accountId, const char* nickname)
 		{
@@ -754,6 +735,7 @@ namespace Main
 
 		void Player::setIsInMatch(bool val)
 		{
+			std::cout << "Set Is In Match to: " << val << '\n';
 			m_isInMatch = val;
 		}
 
@@ -764,7 +746,10 @@ namespace Main
 
 		void Player::leaveRoom()
 		{
+			std::cout << "Player left match\n";
 			setRoomNumber(0);
+			setPlayerState(Common::Enums::STATE_LOBBY);
+			setIsInLobby(true);
 			setIsInMatch(false);
 			m_batteryObtainedInMatch = 0;
 		}
@@ -774,6 +759,7 @@ namespace Main
 			if (m_roomNumber > 0)
 			{
 				--m_roomNumber;
+				std::cout << "PLAYER ROOM NUMBER: " << m_roomNumber << '\n';
 			}
 		}
 	}

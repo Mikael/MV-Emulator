@@ -1,4 +1,4 @@
-	#ifndef COMMON_GAME_ENUMS_H
+#ifndef COMMON_GAME_ENUMS_H
 #define COMMON_GAME_ENUMS_H
 
 #include <cstdint>
@@ -54,7 +54,7 @@ namespace Common
 		enum PlayerState : std::uint32_t
 		{
 			STATE_EXIT = 0,
-            STATE_SINGLEPLAYER = 3,
+			STATE_SINGLEPLAYER = 3,
 			STATE_LOBBY = 4,
 			STATE_SHOP = 5,
 			STATE_INVENTORY = 6,
@@ -63,7 +63,7 @@ namespace Common
 			STATE_READY = 9,
 			STATE_LOADING = 10,
 			STATE_LOADED = 11,
-			STATE_NORMAL = 12, 
+			STATE_NORMAL = 12,
 			STATE_DYING = 13, // ???
 			STATE_TRADE = 14, // N.b. this state is only for the server, doesn't exist in the client
 			STATE_MATCH = 15, // Custom thing

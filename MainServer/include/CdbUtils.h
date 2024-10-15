@@ -160,16 +160,16 @@ namespace Main
 				if (entry == std::nullopt)
 				{
 					return std::nullopt;
-				}				
+				}
 				return entry->ui_parentid;
 			}
 
 			std::vector<Main::Structures::CapsuleList> getCapsuleItems(std::uint32_t maxItems)
-			{	
+			{
 				m_maxCapsuleItems = maxItems;
 				auto entries = cdbCapsuleInfos::getInstance().getEntries();
 				std::vector<Main::Structures::CapsuleList> ret;
-				for (std::size_t total = 0; const auto& [id, capsuleInfoStruct] : entries)
+				for (std::size_t total = 0; const auto & [id, capsuleInfoStruct] : entries)
 				{
 					if (total >= maxItems) break;
 					ret.push_back(Main::Structures::CapsuleList{ static_cast<std::uint32_t>(capsuleInfoStruct.gi_id), static_cast<std::uint32_t>(capsuleInfoStruct.gi_price) });
@@ -178,7 +178,7 @@ namespace Main
 				return ret;
 			}
 
-		
+
 			std::optional<Common::ConstantDatabase::CdbCapsuleInfo> getCapsuleInfoById(std::uint32_t gi_id) const
 			{
 				const auto& entries = cdbCapsuleInfos::getInstance().getEntries();

@@ -26,14 +26,13 @@ namespace Main
 		Session::Session(Main::Persistence::MainScheduler& scheduler, tcp::socket&& socket, std::function<void(std::size_t)> fnct)
 			: Common::Network::Session{ std::move(socket), fnct }
 			, m_scheduler{ scheduler }
-			, m_fnct{ fnct }  // Ensure that m_fnct is also initialized
-			// m_socket is already initialized by Common::Network::Session
+			, m_fnct{ fnct }
 		{
 		}
 
 		std::size_t Session::getSessionId() const
 		{
-			return m_id;
+			return getId();
 		}
 		//void Session::onPacket(std::vector<std::uint8_t>& data)
 		//{
@@ -83,17 +82,15 @@ namespace Main
 
 				const std::uint16_t callbackNum = incomingPacket.getOrder();
 				if (callbackNum == 0) {
-					return; // Ignore packets with an order of 0
+					return;
 				}
 
 				auto callbackIt = Common::Network::Session::callbacks<Session>.find(callbackNum);
 				if (callbackIt == Common::Network::Session::callbacks<Session>.end()) {
-					// Log and ignore unhandled packets
 					std::cerr << "[MainSession] No callback for order: " << callbackNum << "\n";
-					return; // Stop processing this packet but continue the program
+					return; 
 				}
 
-				// Call the registered callback
 				callbackIt->second(incomingPacket, *this);
 			}
 			catch (const std::exception& e) {
