@@ -19,7 +19,11 @@ namespace Cast
             const auto receiverSessionId = request.getSession();
             const auto hostSessionId = session.getId();
 
+            std::cout << "Host: " << hostSessionId << " sending tick to: " << receiverSessionId << '\n';
             roomsManager.hostForwardToPlayer(hostSessionId, receiverSessionId, const_cast<Common::Network::Packet&>(request));
+
+           // roomsManager.printRoomInfo(session.getRoomId(), "After handle room tick providing");
+
         }
     }
 }

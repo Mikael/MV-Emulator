@@ -33,31 +33,31 @@ namespace Main
 		};
 
 		inline std::pair<std::uint32_t, std::uint32_t> itemSelectionAlgorithm(const Main::ConstantDatabase::CdbUtil& cdbUtil, std::uint32_t gi_infoid,
-			std::uint32_t gi_price, std::uint32_t gi_type)
+			std::uint32_t gi_price, std::uint32_t gi_type) 
 		{
 			static std::array<double, 3> averageSpinCostByCurrency = cdbUtil.getAverageSpinCostByCurrency();
 			auto items = cdbUtil.getAllEntriesWhereId(gi_infoid);
 
 			constexpr const std::uint32_t maxProbability = 200'000;
-			constexpr const double priceFactor = 0.2;
+			constexpr const double priceFactor = 0.2; 
 
 			std::vector<std::pair<std::pair<std::uint32_t, std::uint32_t>, double>> itemProbabilities;
-			for (const auto& item : items)
+			for (const auto& item : items) 
 			{
 				double probability = static_cast<double>(item.gi_prob) / maxProbability * 100.0;
 				if (gi_price > averageSpinCostByCurrency[gi_type] && item.gi_type == 1) // Increase chance for rare
 				{
-					probability *= (1.0 + priceFactor);
+					probability *= (1.0 + priceFactor); 
 				}
 				else if (gi_price < averageSpinCostByCurrency[gi_type] && item.gi_type == 1) // decrease chance for rare
 				{
-					probability *= (1.0 - priceFactor);
+					probability *= (1.0 - priceFactor); 
 				}
 				itemProbabilities.emplace_back(std::pair{ item.gi_itemid, item.gi_type }, probability);
 			}
 
 			std::vector<double> probabilities;
-			for (const auto& pair : itemProbabilities)
+			for (const auto& pair : itemProbabilities) 
 			{
 				probabilities.push_back(pair.second);
 			}
@@ -93,7 +93,7 @@ namespace Main
 			{
 				std::uint32_t capsuleId{};
 				std::uint32_t currencySpent{};
-				std::uint64_t unknown{};
+				std::uint64_t unknown{}; 
 			} receivedRequest;
 			std::memcpy(&receivedRequest, request.getData(), sizeof(receivedRequest));
 
@@ -101,19 +101,19 @@ namespace Main
 			response.setTcpHeader(request.getSession(), Common::Enums::USER_LARGE_ENCRYPTION);
 			response.setOrder(request.getOrder());
 			response.setMission(CapsuleSpinMission::NORMAL_SPIN);
-			response.setExtra(CapsuleSpinExtra::SPIN_SUCCESS);
+			response.setExtra(CapsuleSpinExtra::SPIN_SUCCESS); 
 			response.setOption(1); // number of items per spin (e.g 2 if we want to add addiitonal coupon)
 
 			Main::ConstantDatabase::CdbUtil cdbUtil;
 			const auto& capsuleInfo = cdbUtil.getCapsuleInfoById(receivedRequest.capsuleId);
 			if (capsuleInfo == std::nullopt)
-			{
+			{	
 				response.setExtra(CapsuleSpinExtra::FAIL);
 				response.setMission(1);
 				session.asyncWrite(response);
 				return;
 			}
-
+		
 			const auto& accountInfo = session.getAccountInfo();
 
 			if (capsuleInfo->gi_type == CapsuleCurrencyType::COINS && accountInfo.coins < capsuleInfo->gi_price * request.getOption()

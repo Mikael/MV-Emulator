@@ -153,7 +153,7 @@ namespace Common
                     Common::Enums::Chess, Common::Enums::ToyFleet, Common::Enums::TrackersFactory,
                     Common::Enums::Beach, Common::Enums::BattleMine, Common::Enums::ToyGarden,
                     Common::Enums::Neighboorhood, Common::Enums::MagicPaperLand, Common::Enums::HobbyShop,
-                    Common::Enums::Academy, Common::Enums::TheStudio, Common::Enums::PVCFactory, Common::Enums::HouseTop,
+                    Common::Enums::Academy, Common::Enums::TheStudio, Common::Enums::PVCFactory, Common::Enums::HouseTop, 
                     Common::Enums::WildWest, Common::Enums::RumpusRoom, Common::Enums::Cargo, Common::Enums::PVCFactoryDark,
                     Common::Enums::JunkYard, Common::Enums::GothicCastle, Common::Enums::Bitmap, Common::Enums::RockBand,
                     Common::Enums::ModelShip, Common::Enums::Football, Common::Enums::Bitmap2, Common::Enums::ToyGarden,
@@ -183,7 +183,7 @@ namespace Common
                     Common::Enums::ForgottenJunkYard, Common::Enums::JunkYard, Common::Enums::GothicCastle, Common::Enums::Bitmap,
                     Common::Enums::RockBand, Common::Enums::ModelShip, Common::Enums::Football, Common::Enums::Bitmap2,
                     Common::Enums::ToyGarden2, Common::Enums::RockBandS, Common::Enums::RockBandW, Common::Enums::TheAftermath
-                };
+                }; 
 
             case Common::Enums::SquareMode://done
                 return {
@@ -209,14 +209,14 @@ namespace Common
                 };
             case Common::Enums::CaptureTheBattery://done
                 return {
-                    Common::Enums::ToyFleet, Common::Enums::TrackersFactory, Common::Enums::Beach, Common::Enums::ToyGarden,
-                    Common::Enums::Neighboorhood, Common::Enums::MagicPaperLand, Common::Enums::HobbyShop,Common::Enums::Academy,
+                    Common::Enums::ToyFleet, Common::Enums::TrackersFactory, Common::Enums::Beach, Common::Enums::ToyGarden, 
+                    Common::Enums::Neighboorhood, Common::Enums::MagicPaperLand, Common::Enums::HobbyShop,Common::Enums::Academy, 
                     Common::Enums::TheStudio, Common::Enums::PVCFactory, Common::Enums::HouseTop,Common::Enums::RumpusRoom,
-                    Common::Enums::Cargo, Common::Enums::PVCFactoryDark,Common::Enums::ForgottenJunkYard, Common::Enums::JunkYard,
+                    Common::Enums::Cargo, Common::Enums::PVCFactoryDark,Common::Enums::ForgottenJunkYard, Common::Enums::JunkYard, 
                     Common::Enums::RockBand, Common::Enums::Football,Common::Enums::ToyGarden2, Common::Enums::RockBandS, Common::Enums::CastleSiege,
                     Common::Enums::TheAftermath
                 };
-
+               
             case Common::Enums::Elimination://done
                 return {
                     Common::Enums::ToyFleet, Common::Enums::TrackersFactory, Common::Enums::Beach, Common::Enums::BattleMine,

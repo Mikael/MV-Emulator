@@ -10,38 +10,38 @@ unsigned int translateColorCode(unsigned int win)
 {
 	switch ((win & 0xF))
 	{
-	case 0:
-		return 30;
-	case 1:
-		return 34;
-	case 2:
-		return 32;
-	case 3:
-		return 36;
-	case 4:
-		return 31;
-	case 5:
-		return 35;
-	case 6:
-		return 33;
-	case 7:
-		return 37;
-	case 8:
-		return 90;
-	case 9:
-		return 94;
-	case 0xA:
-		return 92;
-	case 0xB:
-		return 96;
-	case 0xC:
-		return 91;
-	case 0xD:
-		return 95;
-	case 0xE:
-		return 93;
-	case 0xF:
-		return 97;
+		case 0:
+			return 30;
+		case 1:
+			return 34;
+		case 2:
+			return 32;
+		case 3:
+			return 36;
+		case 4:
+			return 31;
+		case 5:
+			return 35;
+		case 6:
+			return 33;
+		case 7:
+			return 37;
+		case 8:
+			return 90;
+		case 9:
+			return 94;
+		case 0xA:
+			return 92;
+		case 0xB:
+			return 96;
+		case 0xC:
+			return 91;
+		case 0xD:
+			return 95;
+		case 0xE:
+			return 93;
+		case 0xF:
+			return 97;
 	}
 	return 1;
 }
@@ -51,7 +51,7 @@ void SetConsoleTextAttribute(unsigned int useless, unsigned int code)
 	unsigned int bg = (code >> 4) & 0xF;
 	unsigned int fg = code & 0xF;
 
-	std::cout << "\033[" << translateColorCode(bg) + 10 << ";" << translateColorCode(fg) << "m";
+	std::cout << "\033["<<translateColorCode(bg) + 10<<";"<<translateColorCode(fg)<<"m";
 }
 #endif
 
@@ -101,7 +101,7 @@ namespace Common
 			SetConsoleTextAttribute(hConsole, 7);
 		}
 
-		std::pair<std::size_t, uint32_t> parseTcpHeader(std::uint8_t* data)
+		std::pair<std::size_t, uint32_t> parseTcpHeader(std::uint8_t* data) 
 		{
 			SetConsoleTextAttribute(hConsole, 3);
 			std::cout << "\nTcp Header: \n";
@@ -120,13 +120,13 @@ namespace Common
 			return std::pair{ sizeRetrievedFromTcpHeader, toCrypt };
 		}
 
-		void parseDecryptedPacket(std::size_t len, std::uint8_t* data)
+		void parseDecryptedPacket(std::size_t len, std::uint8_t* data) 
 		{
 			parseCommandHeader(data);
 			SetConsoleTextAttribute(hConsole, 3);
 			std::cout << "Decrypted Packet: \n";
 			SetConsoleTextAttribute(hConsole, 7);
-			for (std::size_t i = 0; i < len; ++i)
+			for (std::size_t i = 0; i < len; ++i) 
 			{
 				printf("%02X ", static_cast<uint8_t>(data[i]));
 			}
@@ -182,7 +182,7 @@ namespace Common
 				printf("\n");
 				return;
 			}
-
+			
 			else {
 				switch (toCrypt) {
 				case 0: // no crypt

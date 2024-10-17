@@ -137,19 +137,17 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_WIN32_WINNT=0x0601;SQLITECPP_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\sqlite3;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\cpp-httplib-master;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\json-develop\json-develop\include;D:\curl-master\include;D:\range-v3\include;D:\boost_1_86_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\Common\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\AuthServer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp;D:\range-v3\include;D:\boost_1_86_0;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\Common\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\AuthServer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>..\ExternalLibraries\CommonLib\Common.lib;..\ExternalLibraries\SQLiteCpp\sqlite3\sqlite3.lib;..\ExternalLibraries\SQLiteCpp\sqlite3\SQLiteCpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\ExternalLibraries\CommonLib\Common.lib;..\ExternalLibraries\SQLiteCpp\sqlite3\sqlite3.lib;..\ExternalLibraries\SQLiteCpp\sqlite3\SQLiteCpp.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -160,7 +158,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AuthEnums.h" />
-    <ClInclude Include="include\Constants.h" />
     <ClInclude Include="include\Database\DbPlayerInfo.h" />
     <ClInclude Include="include\Handlers\AuthAccountBusyHandler.h" />
     <ClInclude Include="include\Handlers\AuthAllHandlers.h" />

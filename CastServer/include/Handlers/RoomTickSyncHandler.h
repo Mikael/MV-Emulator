@@ -18,10 +18,14 @@ namespace Cast
         */
         inline void handleRoomTickSyncRequest(const Common::Network::Packet& request, Cast::Network::Session& session, Cast::Classes::RoomsManager& roomsManager)
         {
+            std::cout << "Player: " << session.getId() << " asking Tick Request to: " << request.getSession() << '\n';
+
             const auto roomHostSessionId = request.getSession();
             const auto selfSessionId = session.getId();
 
             roomsManager.playerForwardToHost(roomHostSessionId, selfSessionId, const_cast<Common::Network::Packet&>(request));
+
+            //roomsManager.printRoomInfo(session.getRoomId(), "After handle room tick sync req");
         }
     }
 }

@@ -17,6 +17,7 @@
 #include <chrono>
 #include <asio.hpp>
 #include <database/MainScheduler.h>
+
 std::map<std::uint16_t, std::size_t> errorLogCount;
 
 namespace Main
@@ -28,6 +29,15 @@ namespace Main
 			, m_scheduler{ scheduler }
 			, m_fnct{ fnct }
 		{
+		}
+
+		std::chrono::time_point<std::chrono::high_resolution_clock> Session::getLastPingUpdate() const
+		{
+			return std::chrono::time_point<std::chrono::high_resolution_clock>();
+		}
+		void Session::setLastPingUpdate(std::chrono::time_point<std::chrono::high_resolution_clock> lastPingUpdate)
+		{
+			m_lastPingUpdate = lastPingUpdate;
 		}
 
 		std::size_t Session::getSessionId() const
@@ -88,7 +98,7 @@ namespace Main
 				auto callbackIt = Common::Network::Session::callbacks<Session>.find(callbackNum);
 				if (callbackIt == Common::Network::Session::callbacks<Session>.end()) {
 					std::cerr << "[MainSession] No callback for order: " << callbackNum << "\n";
-					return; 
+					return;
 				}
 
 				callbackIt->second(incomingPacket, *this);

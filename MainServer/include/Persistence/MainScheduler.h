@@ -54,14 +54,14 @@ namespace Main
             template<typename Function, typename... Args>
             void addRepetitiveCallback(std::uint32_t accountId, Function databaseMemberFunction, Args&&... args)
             {
-                std::lock_guard<std::mutex> lock(m_mutex);
+                std::lock_guard<std::mutex> lock(m_mutex); 
                 m_databaseCallbacksIncremental[accountId][++m_incrementalDifferentiationKey] = std::bind(databaseMemberFunction, &m_database, std::forward<Args>(args)...);
             }
 
             template<typename Function, typename... Args>
             void immediatePersist(std::uint32_t accountId, Function databaseMemberFunction, Args&&... args)
             {
-                std::lock_guard<std::mutex> lock(m_mutex);
+                std::lock_guard<std::mutex> lock(m_mutex); 
                 std::bind(databaseMemberFunction, &m_database, std::forward<Args>(args)...)();
             }
 

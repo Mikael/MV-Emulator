@@ -11,38 +11,17 @@ void printInitialInformation()
 	std::cout << "Auth server initialized on " << time_s << "\n\n";
 }
 
-int main() {
-    SetConsoleTitleW(L"Microvolts Auth Server");
+int main()
+{
+	SetConsoleTitleW(L"Microvolts Auth Server");
 
-    asio::io_context io_context;
+	asio::io_context io_context;
 
-    std::cout << "Server initialization...\n";
+	std::cout << "sv initialization...\n";
+	Auth::AuthServer srv(io_context, 13000);
 
-    std::shared_ptr<Auth::AuthServer> srv = std::make_shared<Auth::AuthServer>(io_context, 13000);
+	printInitialInformation();
 
-    printInitialInformation();
-
-    srv->asyncAccept();
-
-    const std::uint32_t num_threads = std::thread::hardware_concurrency();
-    std::vector<std::thread> threads;
-
-    threads.reserve(num_threads);
-    for (std::uint32_t i = 0; i < num_threads; ++i) {
-        threads.emplace_back([&io_context]() {
-            try {
-                io_context.run();
-            }
-            catch (const std::exception& e) {
-                std::cerr << "Error in io_context.run(): " << e.what() << std::endl;
-            }
-            });
-    }
-
-    for (auto& thread : threads) {
-        thread.join();
-    }
-
-    std::cout << "Server shutting down...\n";
-    return 0;
+	srv.asyncAccept();
+	io_context.run();
 }

@@ -16,7 +16,7 @@ namespace Common
 
 			// for some reaso std::numeric_limits<std::uint32_t>::max() gives compiler errors
 			// apparently it has to do with Parser.cpp, if we move everything inside Parser.h then ::max() works fine...
-			std::uniform_int_distribution<std::uint32_t> distribution(1, static_cast<std::uint32_t>(-1));
+			std::uniform_int_distribution<std::uint32_t> distribution(1, static_cast<std::uint32_t>(-1)); 
 
 			return distribution(gen);
 		}

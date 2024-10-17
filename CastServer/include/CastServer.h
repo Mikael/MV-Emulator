@@ -25,7 +25,6 @@ namespace Cast
 
 	public:
 		CastServer(ioContext& io_context, std::uint16_t port, std::uint16_t serverId);
-
 		void asyncAccept();
 	};
 }

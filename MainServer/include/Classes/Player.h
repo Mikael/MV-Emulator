@@ -62,21 +62,20 @@ namespace Main
 
 			// Other
 			std::uint16_t m_roomNumber{};
+			bool m_isInMatch{};
 			mutable std::uint64_t m_latestItemNumber{};
 			std::uint32_t m_batteryObtainedInMatch{};
 
 
 		public:
 			Player();
-			std::uint16_t getPing() const;
-			void setPing(std::uint16_t ping);
+
 			// Account info
 			void setAccountInfo(const AccountInfo& accountInfo);
 			void addBatteryObtainedInMatch(std::uint32_t newBattery);
 			void storeBatteryObtainedInMatch();
 			const AccountInfo& getAccountInfo() const;
 			std::uint32_t getAccountID() const;
-			bool m_isInMatch{ false };
 			const char* const getPlayerName() const;
 			void setAccountRockTotens(std::uint32_t rt);
 			void setAccountMicroPoints(std::uint32_t mp);
@@ -90,6 +89,8 @@ namespace Main
 			void addLuckyPoints(std::uint32_t points);
 			void setLuckyPoints(std::uint32_t points);
 			std::uint32_t getLuckyPoints() const;
+			void setPing(std::uint16_t ping);
+			std::uint16_t getPing() const;
 			void setIsInLobby(bool val);
 			bool isInLobby() const;
 			void mute(const std::string& reason, const std::string& mutedBy, const std::string& mutedUntil);
@@ -115,7 +116,6 @@ namespace Main
 			const std::unordered_map<std::uint64_t, EquippedItem>& getEquippedItems() const;
 			const std::unordered_map<std::uint64_t, Item>& getItems() const;
 			const std::vector<Item> getItemsAsVec() const;
-			bool deleteItem(const Main::Structures::ItemSerialInfo& itemSerialInfo);
 			bool deleteItemBasic(const Main::Structures::ItemSerialInfo& itemSerialInfo);
 			void addItems(const std::vector<Item>& items);
 			void addItem(const Item& item);
@@ -124,7 +124,7 @@ namespace Main
 			Item addItemFromTrade(TradedItem tradeItem);
 			void setEquippedItems(const std::unordered_map<std::uint16_t, std::vector<EquippedItem>>& equippedItems);
 			std::optional<std::pair<std::uint16_t, std::uint64_t>>
-				addEnergyToItem(const Main::Structures::ItemSerialInfo& itemSerialInfo, std::uint32_t energyAdded);
+			addEnergyToItem(const Main::Structures::ItemSerialInfo& itemSerialInfo, std::uint32_t energyAdded);
 			// ugly design but easier to write, ideally we shouldn't pass the scheduler to this function...
 			void equipItem(const std::uint16_t itemNumber, Main::Persistence::MainScheduler& scheduler);
 			std::optional<std::uint64_t> unequipItem(uint64_t itemType, Main::Persistence::MainScheduler& scheduler);

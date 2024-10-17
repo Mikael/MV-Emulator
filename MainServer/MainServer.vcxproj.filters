@@ -35,7 +35,6 @@
     <ClCompile Include="src\ChatCommands\SimpleCommands\Shutdown.cpp" />
     <ClCompile Include="src\ChatCommands\SimpleRoomCommands\Muteroom.cpp" />
     <ClCompile Include="src\ChatCommands\SimpleRoomCommands\UnmuteRoom.cpp" />
-    <ClCompile Include="src\ChatCommands\SimpleRoomCommands\bossmap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ChatCommands\AllCommandsIncludes.h" />
@@ -86,6 +85,7 @@
     <ClInclude Include="include\Handlers\Trade\TradeInitializationHandler.h" />
     <ClInclude Include="include\Handlers\Trade\TradeRemoveItemHandler.h" />
     <ClInclude Include="include\Persistence\MainDatabaseManager.h" />
+    <ClInclude Include="include\Database\MainScheduler.h" />
     <ClInclude Include="include\Handlers\Item\BoughtItemHandler.h" />
     <ClInclude Include="include\Handlers\Player\Friends\FriendPlayersListHandler.h" />
     <ClInclude Include="include\Handlers\Player\InitialPlayerInfoHandlers.h" />
@@ -137,11 +137,7 @@
     <ClInclude Include="include\ChatCommands\SimpleCommands\Shutdown.h" />
     <ClInclude Include="include\ChatCommands\SimpleRoomCommands\Muteroom.h" />
     <ClInclude Include="include\ChatCommands\SimpleRoomCommands\UnmuteRoom.h" />
-    <ClInclude Include="include\ChatCommands\SimpleRoomCommands\bossmap.h" />
-    <ClInclude Include="include\Network\AuthSession.h" />
     <ClInclude Include="include\Structures\ClientData\Structures.h" />
     <ClInclude Include="include\Utilities.h" />
-    <ClInclude Include="include\Database\ThreadPool.h" />
-    <ClInclude Include="include\Database\MainScheduler.h" />
   </ItemGroup>
 </Project>

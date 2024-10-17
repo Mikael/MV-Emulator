@@ -33,7 +33,7 @@ namespace Main
 			JOIN_ASK_PASSWORD = 0xE, // apparently this asks the user to input a password (even if the room doesn't have it) -- but the client already does this
 			JOIN_LEVEL_TOO_HIGH = 0x15, // the host of the room has a low level, higher level players cannot join their room
 			JOIN_KICKED_FROM_ROOM = 0x2A,
-			JOIN_INVALID_PASSWORD = 0x2C, 
+			JOIN_INVALID_PASSWORD = 0x2C,
 		};
 
 		// N.B GM grade can't enter observer mode at all seemingly (it's literally disabled)
@@ -208,18 +208,18 @@ namespace Main
 
 			if (!joinedAsObserver)
 			{
-			response.setOrder(request.getOrder());
-			response.setData(nullptr, 0);
-			response.setOption(1);
-			response.setMission(0);
-			// extra 0, mission 0 ==> observer mode
-			// extra 0, mission 1 ==> seemingly invisible mode?!
-			response.setExtra(joinedAsObserver ? RoomJoinExtra::JOIN_OBSERVER_MODE : RoomJoinExtra::JOIN_SUCCESS);
-			response.setExtra(RoomJoinExtra::JOIN_SUCCESS);
-			session.asyncWrite(response);
+				response.setOrder(request.getOrder());
+				response.setData(nullptr, 0);
+				response.setOption(1);
+				response.setMission(0);
+				// extra 0, mission 0 ==> observer mode
+				// extra 0, mission 1 ==> seemingly invisible mode?!
+				response.setExtra(joinedAsObserver ? RoomJoinExtra::JOIN_OBSERVER_MODE : RoomJoinExtra::JOIN_SUCCESS);
+				response.setExtra(RoomJoinExtra::JOIN_SUCCESS);
+				session.asyncWrite(response);
 			}
 			// THIS SEEMS WRONG. FIRST IT NEEDS TO BE SENT BEFORE "SUCCESS IN JOINING THE ROOM" PROBABLY; BUT THEN SETTINGS ARE WRONG.
-			
+
 			// Latest, missing information about the room
 			Main::Structures::RoomJoinLatestInfo roomJoinLatestInfo{ room.getSpecificSetting(), static_cast<bool>(roomInfo.hasMatchStarted), static_cast<bool>(roomSettings.isItemOn),
 				static_cast<std::uint16_t>(roomSettings.time), roomSettings.weaponRestriction };
@@ -254,7 +254,7 @@ namespace Main
 				{
 					latestEnteredPlayerInfo.team = Common::Enums::Team::TEAM_ALL;
 				}
-			}			
+			}
 			response.setOrder(RoomJoinOrder::RoomLatestEnteredPlayerInfo);
 			response.setExtra(0);
 			response.setMission(0);

@@ -7,41 +7,42 @@
 
 namespace Cast
 {
-	namespace Classes
-	{
-		class RoomsManager
-		{
-		private:
-			std::unordered_map<std::uint64_t, std::shared_ptr<Cast::Classes::Room>> m_playerSessionIdToRoom{};
+    namespace Classes
+    {
+        class RoomsManager
+        {
+        private:
+            std::unordered_map<std::uint64_t, std::shared_ptr<Cast::Classes::Room>> m_playerSessionIdToRoom{};
 
-		public:
-			void addRoom(std::shared_ptr<Cast::Classes::Room> room, std::uint64_t playerId);
+        public:
+            void addRoom(std::shared_ptr<Cast::Classes::Room> room, std::uint64_t playerId);
 
-			void printRoomInfo(std::uint64_t sessionId, const std::string& furtherInfo)
-			{
-			}
-			void switchRoomJoinOrExit(Cast::Network::Session& session, std::uint64_t hostSessionId = -1);
+            // Debug
+            void printRoomInfo(std::uint64_t sessionId, const std::string& furtherInfo) {}
 
-			void broadcastToRoomExceptSelf(std::uint64_t selfSessionId, Common::Network::Packet& packet);
+            void switchRoomJoinOrExit(Cast::Network::Session& session, std::uint64_t hostSessionId = -1);
 
-			void broadcastToRoom(std::uint64_t hostSessionId, Common::Network::Packet& packet);
+            void broadcastToRoomExceptSelf(std::uint64_t selfSessionId, Common::Network::Packet& packet);
 
-			void playerForwardToHost(std::uint64_t hostSessionId, std::uint64_t senderSessionId, Common::Network::Packet& packet);
+            void broadcastToRoom(std::uint64_t hostSessionId, Common::Network::Packet& packet);
 
-			void hostForwardToPlayer(std::uint64_t hostSessionId, std::uint64_t receiverSessionId, Common::Network::Packet& packet, bool useHostSessionIdInTcpHeader = true);
+            void playerForwardToHost(std::uint64_t hostSessionId, std::uint64_t senderSessionId, Common::Network::Packet& packet);
 
-			void setMapFor(std::uint64_t playerId, std::uint32_t map);
+            void hostForwardToPlayer(std::uint64_t hostSessionId, std::uint64_t receiverSessionId, Common::Network::Packet& packet, bool useHostSessionIdInTcpHeader = true);
 
-			void endMatch(std::uint64_t hostId);
+            void setMapFor(std::uint64_t hostId, std::uint32_t map);
 
-			std::uint32_t getMapOf(std::uint64_t hostId);
+            void setModeFor(std::uint64_t hostId, std::uint32_t mode);
 
-			bool exists(std::uint64_t playerId);
+            void endMatch(std::uint64_t hostId);
 
-			void removePlayerFromRoom(std::uint64_t sessionIdToRemoveFromRoom);
+            std::uint32_t getMapOf(std::uint64_t hostId);
 
-			void leaveAllPlayers(std::uint64_t hostId);
-		};
-	}
+            void removePlayerFromRoom(std::uint64_t sessionIdToRemoveFromRoom);
+
+            void leaveAllPlayers(std::uint64_t hostId);
+        };
+    }
 }
+
 #endif

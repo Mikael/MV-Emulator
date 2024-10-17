@@ -5,8 +5,8 @@
 
 namespace Main
 {
-    namespace Structures
-    {
+	namespace Structures
+	{
 #pragma pack(push, 1)
         struct SinglePlayerInfoList
         {
@@ -17,7 +17,7 @@ namespace Main
             std::uint64_t level : 7;
         };
 #pragma pack(pop)
-    }
+	}
 }
 
 

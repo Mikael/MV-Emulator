@@ -210,7 +210,7 @@ namespace Main
 					SQLite::Transaction transaction(db);
 					SQLite::Statement query(db, queryStr);
 					query.bind(1, nickname);
-
+					
 					if (!query.exec())
 					{
 						std::cerr << "[Main::Database::UnbanPlayer] Error executing query: " << query.getExpandedSQL() << '\n';
@@ -285,7 +285,7 @@ namespace Main
 						item.serialInfo.itemNumber = ++itemNum;
 						SQLite::Statement updateItemNumberQuery(db, "UPDATE UserItems SET ItemNumber = :itemNumber WHERE rowid = :rowid");
 						updateItemNumberQuery.bind(":itemNumber", static_cast<std::int64_t>(item.serialInfo.itemNumber));
-						updateItemNumberQuery.bind(":rowid", rowId);
+				        updateItemNumberQuery.bind(":rowid" ,rowId);
 						if (!updateItemNumberQuery.exec())
 						{
 							std::cerr << "ItemNumberUpdate error in getPlayerItems(): " << updateItemNumberQuery.getExtendedErrorCode() << '\n';
@@ -311,7 +311,7 @@ namespace Main
 						//Main::ConstantDatabase::CdbUtil cdbUtil(item.id);
 						//auto durability = *(cdbUtil.getItemDurability());
 						//auto duration = *(cdbUtil.getItemDuration());
-						//// 
+					    //// 
 
 						item.durability = static_cast<std::uint16_t>(allItemsQuery.getColumn("durability").getInt());
 						item.energy = static_cast<std::uint16_t>(allItemsQuery.getColumn("energy").getInt());
@@ -370,7 +370,7 @@ namespace Main
 				}
 			}
 
-			void replaceItem(std::uint32_t accountID, std::uint32_t itemNum, const Main::Structures::ItemSerialInfo& newSerialInfo,
+			void replaceItem(std::uint32_t accountID, std::uint32_t itemNum, const Main::Structures::ItemSerialInfo& newSerialInfo, 
 				std::uint64_t newExpiration)
 			{
 				try
@@ -610,8 +610,8 @@ namespace Main
 				try
 				{
 					SQLite::Transaction transaction(db);
-					SQLite::Statement query(db, "UPDATE Users SET MeleeKills = ?, RifleKills = ?, ShotgunKills = ?, SniperKills = ?, GatlingKills = ?, "
-						"BazookaKills = ? , GrenadeKills = ? , HighestKillstreak = ? , Kills = ? , Deaths = ? , Headshots = ? , Assists = ?, "
+					SQLite::Statement query(db, "UPDATE Users SET MeleeKills = ?, RifleKills = ?, ShotgunKills = ?, SniperKills = ?, GatlingKills = ?, " 
+						 "BazookaKills = ? , GrenadeKills = ? , HighestKillstreak = ? , Kills = ? , Deaths = ? , Headshots = ? , Assists = ?, "
 						" Experience = ?, MicroPoints = ?, Wins = ?, Loses = ?, Draws = ?, Level = ? WHERE AccountID = ?");
 
 					query.bind(1, updatedAccountInfo.meleeKills);
@@ -975,7 +975,7 @@ namespace Main
 						std::cerr << "[Main::Database::addPendingFriendRequestFor] Error message: " << findPlayerByAccountId.getErrorMsg() << '\n';
 						return Main::Enums::AddFriendServerExtra::TARGET_NOT_FOUND;
 					}
-
+					
 					// 2. Check if the target player has less than 30 friends.
 					SQLite::Statement findTotalFriends(db, "SELECT * FROM Friendlist WHERE AccountID = ?");
 					findTotalFriends.bind(1, targetAid);
@@ -986,7 +986,7 @@ namespace Main
 						std::cerr << "[Main::Database::addPendingFriendRequestFor::findTotalFriends] Error message: " << findTotalFriends.getErrorMsg() << '\n';
 						totalCount = 0;
 					}
-					else
+					else 
 					{
 						totalCount = 1;
 						while (findTotalFriends.executeStep())
@@ -1136,14 +1136,14 @@ namespace Main
 			{
 				try
 				{
-					std::uint32_t accountId = 0;
+					std::uint32_t accountId = 0; 
 					const std::string retrieveAccountIdQuery = "SELECT AccountID FROM Users WHERE Nickname = ?";
 					SQLite::Statement retrieveQuery(db, retrieveAccountIdQuery);
 					retrieveQuery.bind(1, mailbox.nickname);
 
 					if (retrieveQuery.executeStep())
 					{
-						accountId = retrieveQuery.getColumn("AccountID").getInt();
+						accountId = retrieveQuery.getColumn("AccountID").getInt(); 
 					}
 					else
 					{
@@ -1160,7 +1160,7 @@ namespace Main
 					//query.bind(3, mailbox.uniqueId); 
 					query.bind(4, senderNickname);
 					query.bind(5, mailbox.message);
-					query.bind(6, false);
+					query.bind(6, false); 
 					query.bind(7, true);
 
 					if (!query.exec())

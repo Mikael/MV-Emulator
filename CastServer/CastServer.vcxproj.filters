@@ -95,6 +95,9 @@
     <ClInclude Include="include\Classes\RoomsManager.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="include\Handlers\RoomTickProviderHandler.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
     <ClInclude Include="include\Handlers\WeaponHandlers\WeaponAttackHandler.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
@@ -127,9 +130,6 @@
     </ClInclude>
     <ClInclude Include="include\Handlers\MatchEndHandler.h">
       <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Handlers\RoomTickProviderHandler.h">
-      <Filter>File di origine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

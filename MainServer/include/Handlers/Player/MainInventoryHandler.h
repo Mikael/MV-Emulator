@@ -15,10 +15,10 @@ namespace Main
         {
             std::uint32_t accountID;
             std::memcpy(&accountID, request.getData(), sizeof(std::uint32_t));
-
+          
             auto playerItems = database.getPlayerItems(accountID);
             auto nonEquippedItems = playerItems.first;
-            auto equippedItems = playerItems.second;
+            auto equippedItems = playerItems.second;  
 
             // Handle non-equipped items
             Common::Network::Packet response;

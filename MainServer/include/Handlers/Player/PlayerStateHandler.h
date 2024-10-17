@@ -11,66 +11,45 @@ namespace Main
 {
 	namespace Handlers
 	{
-		constexpr int TOTAL_CAPSULE_ITEMS = 5;
-		constexpr int PLAYER_STATE_CHANGE_NOTIFICATION_ORDER = 312;
-		constexpr int ITEM_EQUIP_NOTIFICATION_ORDER = 414;
-		constexpr int STATE_READY = 17;
-
 		inline void handlePlayerState(const Common::Network::Packet& request, Main::Network::Session& session, Main::Classes::RoomsManager& roomsManager)
 		{
-			// If the player is trading or already in the requested state, return
-			auto newState = static_cast<Common::Enums::PlayerState>(request.getOption());
-			if (session.getPlayerState() == Common::Enums::PlayerState::STATE_TRADE || session.getPlayerState() == newState)
-				return;
-
-			// Update the player's state
-			session.setPlayerState(newState);
+			if (session.getPlayerState() == Common::Enums::PlayerState::STATE_TRADE) return;
+			session.setPlayerState(static_cast<Common::Enums::PlayerState>(request.getOption()));
 
 			Common::Network::Packet response;
 			response.setTcpHeader(request.getSession(), Common::Enums::USER_LARGE_ENCRYPTION);
 
-			// Handle entering capsule state (e.g., showing capsule items)
-			if (newState == Common::Enums::PlayerState::STATE_CAPSULE)
+			if (static_cast<Common::Enums::PlayerState>(request.getOption()) == Common::Enums::PlayerState::STATE_CAPSULE)
 			{
-				session.sendCurrency();  // Send the player's currency
-				response.setOrder(83);   // Capsule order, replace magic number with a named constant if available
-
-				// Retrieve capsule items (ensure we handle cases where less than TOTAL_CAPSULE_ITEMS are returned)
+				session.sendCurrency();
+				response.setOrder(83);
 				Main::ConstantDatabase::CdbUtil cdbUtil;
-				auto capsuleItems = cdbUtil.getCapsuleItems(TOTAL_CAPSULE_ITEMS);
-				if (capsuleItems.size() < TOTAL_CAPSULE_ITEMS)
-				{
-					// Error handling: Log the issue or provide a fallback
-					std::cerr << "Error: Less than " << TOTAL_CAPSULE_ITEMS << " capsule items retrieved." << std::endl;
-					return;
-				}
+				auto capsuleItems = cdbUtil.getCapsuleItems(5); // Total items to show in the capsule
 				response.setData(reinterpret_cast<std::uint8_t*>(capsuleItems.data()), capsuleItems.size() * sizeof(Main::Structures::CapsuleList));
-				response.setOption(static_cast<std::uint32_t>(capsuleItems.size()));
+				response.setOption(capsuleItems.size());
 				session.asyncWrite(response);
 			}
 
-			// Find the room the player is in
 			auto foundRoom = roomsManager.getRoomByNumber(session.getRoomNumber());
 			if (foundRoom == std::nullopt) return;
-			auto& room = foundRoom->get();  // Use get() method instead of the operator for clarity
+			auto& room = foundRoom->get();
 			const auto& accountInfo = session.getAccountInfo();
 
-			// Notify other players in the room of the player's state change
-			response.setOrder(PLAYER_STATE_CHANGE_NOTIFICATION_ORDER);
+			response.setOrder(312); // Notify other players in the same room about our current state
 			response.setOption(session.getPlayerState());
 			auto uniqueId = accountInfo.uniqueId;
 			response.setData(reinterpret_cast<std::uint8_t*>(&uniqueId), sizeof(uniqueId));
 			room.broadcastToRoom(response);
 			room.setStateFor(uniqueId, session.getPlayerState());
 
-			// Handle state transitions like ready/waiting and broadcast new equipped items/character
-			if (newState == Common::Enums::PlayerState::STATE_READY || newState == Common::Enums::PlayerState::STATE_WAITING)
+			// Update other players in the room about our new items / character
+			if (static_cast<Common::Enums::PlayerState>(request.getOption()) == Common::Enums::PlayerState::STATE_READY
+				|| static_cast<Common::Enums::PlayerState>(request.getOption()) == Common::Enums::PlayerState::STATE_WAITING)
 			{
 				if (session.getRoomNumber())
 				{
 					room.updatePlayerInfo(&session);
 
-					// Structure to send equipped item info to other players
 					using setItems = Common::ConstantDatabase::CdbSingleton<Common::ConstantDatabase::SetItemInfo>;
 					struct Resp
 					{
@@ -79,10 +58,8 @@ namespace Main
 					} resp;
 					resp.uniqueId = accountInfo.uniqueId;
 
-					// Process equipped items
 					for (const auto& [type, item] : session.getEquippedItems())
 					{
-						// Process SET items
 						if (type >= Common::Enums::ItemType::SET)
 						{
 							auto entry = setItems::getInstance().getEntry("si_id", (item.id >> 1));
@@ -95,22 +72,18 @@ namespace Main
 								}
 							}
 						}
-						// Process HAIR, ACCESSORY, etc.
 						else if (type >= Common::Enums::ItemType::HAIR && type <= Common::Enums::ItemType::ACC_BACK)
 						{
 							resp.items.equippedItems[type] = item;
 						}
-						// Process WEAPONS
 						else if (type >= Common::Enums::ItemType::MELEE && type <= Common::Enums::ItemType::GRENADE)
 						{
-							resp.items.equippedWeapons[type - 10] = item;  // Offset for weapon types
+							resp.items.equippedWeapons[type - 10] = item;
 						}
 					}
-
-					// Send item/character info to other players in the room
-					response.setOrder(ITEM_EQUIP_NOTIFICATION_ORDER);
-					response.setOption(STATE_READY); // Example option for ready state
-					response.setExtra(accountInfo.latestSelectedCharacter);
+					response.setOrder(414);
+					response.setOption(17);
+					response.setExtra(accountInfo.latestSelectedCharacter); 
 					response.setData(reinterpret_cast<std::uint8_t*>(&resp), sizeof(resp));
 					roomsManager.broadcastToRoomExceptSelf(session.getRoomNumber(), accountInfo.uniqueId, response);
 				}

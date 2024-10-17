@@ -24,10 +24,10 @@ namespace Auth
 			response.setOrder(22);
 			response.setMission(0);
 			// note: getPlayerInfo sets command.extra, command.option and message data
-
+			
 			if (response.getExtra() != Auth::Enums::Login::SUCCESS)
 			{
-				response.setData(nullptr, 0);
+				response.setData(nullptr, 0); 
 				session.asyncWrite(response);
 				return;
 			}

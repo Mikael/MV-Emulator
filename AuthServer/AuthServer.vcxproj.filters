@@ -65,8 +65,5 @@
     <ClInclude Include="include\Network\AuthSession.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="include\Constants.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

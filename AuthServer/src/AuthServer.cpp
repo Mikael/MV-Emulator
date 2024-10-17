@@ -21,19 +21,30 @@ namespace Auth
 		Common::Network::Session::addCallback<Auth::Network::Session>(25, Auth::Handlers::handleAccountBusyReconnection);
 	}
 
-	void AuthServer::asyncAccept()
-	{
-		m_socket.emplace(m_io_context);
-		m_acceptor.async_accept(*m_socket, [&](asio::error_code error)
-			{
-				using PlayerMgr = Auth::Player::AuthPlayerManager;
-				using ServerType = Common::Enums::ServerType;
+    void AuthServer::asyncAccept()
+    {
+        m_socket.emplace(m_io_context);
+        m_acceptor.async_accept(*m_socket, [&](asio::error_code error)
+            {
+                if (!error)
+                {
+                    using PlayerMgr = Auth::Player::AuthPlayerManager;
+                    using ServerType = Common::Enums::ServerType;
 
-				auto client = std::make_shared<Auth::Network::Session>(std::move(*AuthServer::m_socket),
-					std::bind(&PlayerMgr::remove, &PlayerMgr::getInstance(), std::placeholders::_1));
+                    auto client = std::make_shared<Auth::Network::Session>(std::move(*AuthServer::m_socket),
+                        std::bind(&PlayerMgr::remove, &PlayerMgr::getInstance(), std::placeholders::_1));
 
-				client->sendConnectionACK(ServerType::AUTH_SERVER);
-				asyncAccept();
-			});
-	}
+                    client->sendConnectionACK(ServerType::AUTH_SERVER);
+                }
+                else
+                {
+                    // Log the error for debugging purposes
+                    std::cerr << "Error accepting connection: " << error.message() << '\n';
+                }
+
+                // Continue accepting connections whether an error occurred or not
+                asyncAccept();
+            });
+    }
+
 }

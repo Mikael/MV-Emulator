@@ -28,23 +28,17 @@ namespace Common
 				return m_requiredGrade;
 			}
 
+			//template<typename SessionType>
 			void sendConfirmation(Common::Network::Packet& response, SessionType& session)
 			{
 				response.setOrder(316);
 				response.setExtra(1);
-
-				if (m_confirmationMessage.size() > std::numeric_limits<std::uint16_t>::max()) {
-					throw std::runtime_error("Confirmation message size exceeds uint16_t limit");
-				}
-
 				response.setData(reinterpret_cast<std::uint8_t*>(m_confirmationMessage.data()), m_confirmationMessage.size());
-				response.setOption(static_cast<std::uint16_t>(m_confirmationMessage.size())); // Cast safely to uint16_t
+				response.setOption(m_confirmationMessage.size());
 				response.setMission(0);
-
 				session.asyncWrite(response);
 				m_confirmationMessage.resize(16);
 			}
-
 
 			virtual ~AbstractCommandBase() = default;
 			virtual void getCommandUsage(SessionType& session, Common::Network::Packet& response) = 0;

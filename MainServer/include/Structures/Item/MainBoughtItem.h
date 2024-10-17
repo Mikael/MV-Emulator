@@ -2,7 +2,6 @@
 #define BOUGHT_ITEM_H
 
 #include <cstdint>
-#include <ctime> // for std::time
 #include "../AccountInfo/MainAccountUniqueId.h"
 #include "MainItemSerialInfo.h"
 #include "ConstantDatabase/Cdb.h"
@@ -13,46 +12,43 @@
 
 namespace Main
 {
-    namespace Structures
-    {
+	namespace Structures
+	{
 #pragma pack(push, 1)
-        struct BoughtItem
-        {
-            std::uint32_t itemId{};
-            std::uint32_t unknown = 0;  // 2==bomb, 3==expired, 0==unlimited, etc.
-            ItemSerialInfo serialInfo{};
+		struct BoughtItem
+		{
+			std::uint32_t itemId{};
+			std::uint32_t unknown = 0;  // 2==bomb, 3==expired, 0==unlimited, etc.
+			ItemSerialInfo serialInfo{};
 
-        public:
-            explicit BoughtItem(std::uint32_t itemId)
-            {
-                this->itemId = itemId - 8388608; // magic value, no idea about the rationale...
-                serialInfo.itemCreationDate = static_cast<__time32_t>(std::time(0));
-                serialInfo.itemOrigin = Main::Enums::ItemFrom::SHOP;
-                serialInfo.m_serverId = 0; // hardcoded for now
-            }
-        };
+		public:
+			explicit BoughtItem(std::uint32_t itemId)
+			{
+				this->itemId = itemId - 8388608; // magic value, no idea about the rationale...
+				serialInfo.itemCreationDate = static_cast<__time32_t>(std::time(0));
+				serialInfo.itemOrigin = Main::Enums::ItemFrom::SHOP;
+				serialInfo.m_serverId = 0; // hardcoded for now				
+			}
+		};
 #pragma pack(pop)
 
 #pragma pack(push, 1)
-        struct BoughtItemToProlong
-        {
-            ItemSerialInfo serialInfo{};
-            std::uint32_t unknown = 1;
+		struct BoughtItemToProlong
+		{
+			ItemSerialInfo serialInfo{};
+			std::uint32_t unknown = 1;  
 
-        public:
-            BoughtItemToProlong()
-            {
-                serialInfo.itemCreationDate = static_cast<__time32_t>(std::time(0));
-                serialInfo.itemOrigin = Main::Enums::ItemFrom::SHOP;
-                serialInfo.m_serverId = 0; // hardcoded for now
-            }
-
-            // Optional: Constructor with ItemSerialInfo if needed
-            explicit BoughtItemToProlong(const ItemSerialInfo& info)
-                : serialInfo(info), unknown(1) {} // Initialize with provided info
-        };
+		public:
+			BoughtItemToProlong()
+			{
+				serialInfo.itemCreationDate = static_cast<__time32_t>(std::time(0));
+				serialInfo.itemOrigin = Main::Enums::ItemFrom::SHOP;
+				serialInfo.m_serverId = 0; // hardcoded for now				
+			}
+		};
 #pragma pack(pop)
-    }
+	}
 }
 
-#endif // BOUGHT_ITEM_H
+#endif
+

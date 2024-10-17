@@ -33,7 +33,8 @@ namespace Main
             using tcp = asio::ip::tcp;
 
             explicit Session(Main::Persistence::MainScheduler& scheduler, tcp::socket&& socket, std::function<void(std::size_t)> fnct);
-
+            std::chrono::time_point<std::chrono::high_resolution_clock> getLastPingUpdate() const;
+            void setLastPingUpdate(std::chrono::time_point<std::chrono::high_resolution_clock> lastPingUpdate);
             std::size_t getSessionId() const;
 
             void onPacket(std::vector<std::uint8_t>& data) override;

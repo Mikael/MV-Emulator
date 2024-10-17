@@ -3,24 +3,20 @@
 #include <functional>
 #include <chrono>
 #include <vector>
+
 #include <iostream>
 #include "asio.hpp"
 #include <Utils/Parser.h>
+
 #include "../../../MainServer/include/Structures/AccountInfo/MainAccountInfo.h"
 #include "../../include/Network/CastSession.h"
-#include <Utils/Logger.h>
 
 namespace Cast
 {
     namespace Network
     {
-        struct LogInfo {
-            std::chrono::steady_clock::time_point lastLogged;
-            int count;
-        };
-
         Session::Session(tcp::socket&& socket, std::function<void(std::size_t)> fnct)
-            : Common::Network::Session{ std::move(socket), fnct }
+            : Common::Network::Session{ std::move(socket), fnct }, socket_(std::move(socket))  // Initialize socket_
         {
         }
 
@@ -30,23 +26,14 @@ namespace Cast
             incomingPacket.processIncomingPacket(data.data(), static_cast<std::uint16_t>(data.size()), std::nullopt);
 
             const std::uint16_t callbackNum = incomingPacket.getOrder();
-
-            // Check if callbackNum is 0
-            if (callbackNum == 0)
-            {
-                std::cerr << "[Session::onPacket] Ignored packet with order 0.\n";
-                return; // Early return without stopping the program
-            }
-
             if (!Common::Network::Session::callbacks<Session>.contains(callbackNum))
             {
-                std::cerr << "[Session] No callback for order: " << callbackNum << "\n";
+                std::cerr << "[CastSession] No callback for order: " << callbackNum << "\n";
                 return;
             }
 
             Common::Network::Session::callbacks<Session>[callbackNum](incomingPacket, *this);
         }
-
 
         void Session::setAccountInfo(const Main::Structures::AccountInfo& accountInfo)
         {
@@ -93,36 +80,27 @@ namespace Cast
             return m_isInMatch;
         }
 
-        //void Session::updateMatchStatus(bool inMatch)
-        //{
-        //    if (m_isInMatch != inMatch)
-        //    {
-        //        m_isInMatch = inMatch;  // Update the match status
-        //        std::cout << "Session ID: " << m_id << " is now " << (inMatch ? "in" : "not in") << " a match.\n";
-        //        //notifyMatchStatusChange(inMatch); 
-        //    }
-        //}
-
         void Session::setIsInMatch(bool val)
         {
+            std::cout << "Set Is In Match set to: " << val << " for sessionID: " << m_id << '\n';
             m_isInMatch = val;
         }
 
-        void Session::close()
+        void Session::close()  // Close the session's socket
         {
-            if (m_socket.is_open())
+            if (socket_.is_open())
             {
                 asio::error_code ec;
-                m_socket.close(ec);
+                socket_.close(ec);  // Gracefully close the socket
                 if (ec)
                 {
                     std::cerr << "Error closing session socket: " << ec.message() << "\n";
                 }
                 else
                 {
-                    std::cout << "Session closed successfully.\n";
+                    std::cout << "Session " << m_id << " disconnected.\n";
                 }
             }
         }
-    };
+    }
 }

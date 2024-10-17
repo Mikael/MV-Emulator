@@ -10,16 +10,16 @@
 namespace Main
 {
 	namespace Handlers
-	{
+	{	
 		// Checked
 		inline void handleMatchLeave(const Common::Network::Packet& request, Main::Network::Session& session, Main::Network::SessionsManager& sessionsManager, Main::Classes::RoomsManager& roomsManager)
 		{
 			Utils::Logger& logger = Utils::Logger::getInstance();
 
 			auto foundRoom = roomsManager.getRoomByNumber(session.getRoomNumber());
-			if (foundRoom == std::nullopt)
+			if (foundRoom == std::nullopt) 
 			{
-				logger.log("Room not found by number!", Utils::LogType::Error, "Main::handleMatchLeave");
+				logger.log("Room not found by number!, Utils::LogType::Error, Main::handleMatchLeave");
 				return;
 			}
 			auto& room = foundRoom->get();
@@ -52,11 +52,12 @@ namespace Main
 				response.setData(reinterpret_cast<std::uint8_t*>(&uniqueId), sizeof(uniqueId));
 				roomsManager.broadcastToRoom(room.getRoomNumber(), response);
 
-				// Update server status for this player only if they are in a match
-				if (session.isInMatch()) {
-					session.setIsInMatch(false); // Set to not in match
-					room.setStateFor(session.getAccountInfo().uniqueId, Common::Enums::STATE_WAITING);
-				}
+				// Update server status for this player
+				session.setIsInMatch(false);
+				room.setStateFor(session.getAccountInfo().uniqueId, Common::Enums::STATE_WAITING);
+
+				// This is NOT necessary: when the user clicks the sign of end match, they leave the match. Check which packet that is.
+				//room.removeHostIfAloneAndModeDoesntAllowIt();
 
 				logger.log("The player " + session.getPlayerInfoAsString() + " has left the match. " + room.getRoomInfoAsString(),
 					Utils::LogType::Normal, "Main::handleMatchLeave");

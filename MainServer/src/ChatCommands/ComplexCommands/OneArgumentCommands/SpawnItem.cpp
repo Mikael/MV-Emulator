@@ -29,8 +29,8 @@ namespace Main
                 return;
             }
 
-            // Check if the player grade is normal before checking blacklisted items
-            if (session.getAccountInfo().playerGrade == Common::Enums::PlayerGrade::GRADE_NORMAL)
+            if (session.getAccountInfo().playerGrade == Common::Enums::PlayerGrade::GRADE_NORMAL ||
+                session.getAccountInfo().playerGrade == Common::Enums::PlayerGrade::GRADE_MOD)
             {
                 httplib::Client cli("141.95.52.69", 3000);
                 cli.set_connection_timeout(10);
@@ -40,7 +40,7 @@ namespace Main
                 };
                 std::string jsonString = requestBody.dump();
 
-                std::cout << "Preparing to send API request to check if item is blacklisted." << std::endl;
+                //std::cout << "Preparing to send API request to check if item is blacklisted." << std::endl;
 
                 auto res = cli.Post("/checkitem", jsonString, "application/json");
 
@@ -65,7 +65,7 @@ namespace Main
                 try {
                     if (!res->body.empty()) {
                         auto jsonResponse = nlohmann::json::parse(res->body);
-                        int blacklisted = jsonResponse.value("blacklisted", 0); 
+                        int blacklisted = jsonResponse.value("blacklisted", 0);
 
                         if (blacklisted == 1) {
                             this->m_confirmationMessage += "error: this item is blacklisted.";

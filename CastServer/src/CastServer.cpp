@@ -28,9 +28,10 @@
 namespace Cast
 {
 	CastServer::CastServer(ioContext& io_context, std::uint16_t port, std::uint16_t serverId)
-		: m_io_context(io_context), m_acceptor(io_context, tcp::endpoint(tcp::v4(), port)), m_serverId(serverId)
+		: m_io_context{ io_context }
+		, m_acceptor{ io_context, tcp::endpoint(tcp::v4(), port), }
+		, m_serverId{ serverId }
 	{
-		asyncAccept(); // Start accepting connections
 		// WORKS:
 		Common::Network::Session::addCallback<Cast::Network::Session>(71, [&](const Common::Network::Packet& request,
 			Cast::Network::Session& session) { Cast::Handlers::pongHandler(request, session, m_roomsManager); });
@@ -38,35 +39,29 @@ namespace Cast
 		Common::Network::Session::addCallback<Cast::Network::Session>(140, [&](const Common::Network::Packet& request,
 			Cast::Network::Session& session) { Cast::Handlers::handlePlayerJoinRoom(request, session, m_roomsManager); });
 
-		/*
-		non host-attack
-		147 mg
-		149 meele
-		151 bazooka
-		152 rifle
-		153 shotgun
-		154 sniper
-		*/
+		// mg
+		Common::Network::Session::addCallback<Cast::Network::Session>(147, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::nonHostWeaponAttack(request, session, m_roomsManager); });
 
-		for (int id : { 147, 149, 151, 152, 153, 154 }) {
-			Common::Network::Session::addCallback<Cast::Network::Session>(id, [&](const Common::Network::Packet& request,
-				Cast::Network::Session& session) { Cast::Handlers::nonHostWeaponAttack(request, session, m_roomsManager); });
-		}
+		// melee
+		Common::Network::Session::addCallback<Cast::Network::Session>(149, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::nonHostWeaponAttack(request, session, m_roomsManager); });
 
-		/*
-		Host weapon attack callbacks
-		MG 266
-		267 melee
-		268 rifle
-		269 shotgun
-		270 sniper
+		// bazooka
+		Common::Network::Session::addCallback<Cast::Network::Session>(151, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::nonHostWeaponAttack(request, session, m_roomsManager); });
 
-		*/
+		// rifle
+		Common::Network::Session::addCallback<Cast::Network::Session>(152, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::nonHostWeaponAttack(request, session, m_roomsManager); });
 
-		for (int id : { 266, 267, 268, 269, 270 }) {
-			Common::Network::Session::addCallback<Cast::Network::Session>(id, [&](const Common::Network::Packet& request,
-				Cast::Network::Session& session) { Cast::Handlers::handleHostWeaponAttack(request, session, m_roomsManager); });
-		}
+		// shotgun
+		Common::Network::Session::addCallback<Cast::Network::Session>(153, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::nonHostWeaponAttack(request, session, m_roomsManager); });
+
+		// sniper
+		Common::Network::Session::addCallback<Cast::Network::Session>(154, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::nonHostWeaponAttack(request, session, m_roomsManager); });
 
 		Common::Network::Session::addCallback<Cast::Network::Session>(166, [&](const Common::Network::Packet& request,
 			Cast::Network::Session& session) { Cast::Handlers::handlePlayerRespawnRequest(request, session, m_roomsManager); });
@@ -81,6 +76,26 @@ namespace Cast
 
 		Common::Network::Session::addCallback<Cast::Network::Session>(264, [&](const Common::Network::Packet& request,
 			Cast::Network::Session& session) { Cast::Handlers::handleExplosivesDamage(request, session, m_roomsManager); });
+
+		// mg 
+		Common::Network::Session::addCallback<Cast::Network::Session>(266, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::handleHostWeaponAttack(request, session, m_roomsManager); });
+
+		// melee
+		Common::Network::Session::addCallback<Cast::Network::Session>(267, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::handleHostWeaponAttack(request, session, m_roomsManager); });
+
+		// rifle
+		Common::Network::Session::addCallback<Cast::Network::Session>(268, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::handleHostWeaponAttack(request, session, m_roomsManager); });
+
+		// shotgun
+		Common::Network::Session::addCallback<Cast::Network::Session>(269, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::handleHostWeaponAttack(request, session, m_roomsManager); });
+
+		// sniper
+		Common::Network::Session::addCallback<Cast::Network::Session>(270, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::handleHostWeaponAttack(request, session, m_roomsManager); });
 
 		Common::Network::Session::addCallback<Cast::Network::Session>(272, [&](const Common::Network::Packet& request,
 			Cast::Network::Session& session) { Cast::Handlers::handleExplosives(request, session, m_roomsManager); });
@@ -115,25 +130,25 @@ namespace Cast
 		Common::Network::Session::addCallback<Cast::Network::Session>(306, [&](const Common::Network::Packet& request,
 			Cast::Network::Session& session) { Cast::Handlers::unknownHandler306(request, session, m_roomsManager); });
 
-		/*
-		CTB battery respawn callbacks
-		CTB battery respawn -- works - 98
-		CTB battery respawn -- works - 165
-		Bomb battle - 271
-		*/
-		for (int id : { 90, 165, 271 }) {
-			Common::Network::Session::addCallback<Cast::Network::Session>(id, [&](const Common::Network::Packet& request,
-				Cast::Network::Session& session) { Cast::Handlers::similarHandlers(request, session, m_roomsManager); });
-		}
-		/*
-		Bomb Battle related callbacks
-		Bomb Battle related - 165
-		Bomb battle related? - 156
-		*/
-		for (int id : { 155, 156 }) {
-			Common::Network::Session::addCallback<Cast::Network::Session>(id, [&](const Common::Network::Packet& request,
-				Cast::Network::Session& session) { Cast::Handlers::playerToHost(request, session, m_roomsManager); });
-		}
+		// CTB battery respawn -- works
+		Common::Network::Session::addCallback<Cast::Network::Session>(90, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::similarHandlers(request, session, m_roomsManager); });
+
+		// CTB battery respawn -- works
+		Common::Network::Session::addCallback<Cast::Network::Session>(165, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::similarHandlers(request, session, m_roomsManager); });
+
+		// Bomb Battle related
+		Common::Network::Session::addCallback<Cast::Network::Session>(155, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::playerToHost(request, session, m_roomsManager); });
+
+		// Bomb battle related?
+		Common::Network::Session::addCallback<Cast::Network::Session>(156, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::playerToHost(request, session, m_roomsManager); });
+
+		// Bomb battle
+		Common::Network::Session::addCallback<Cast::Network::Session>(271, [&](const Common::Network::Packet& request,
+			Cast::Network::Session& session) { Cast::Handlers::similarHandlers(request, session, m_roomsManager); });
 
 		Common::Network::Session::addCallback<Cast::Network::Session>(255, [&](const Common::Network::Packet& request,
 			Cast::Network::Session& session) { Cast::Handlers::roomInfoHandler(request, session, m_roomsManager); });
@@ -178,15 +193,21 @@ namespace Cast
 			{
 				if (!error)
 				{
-					std::cout << "CAST: ASYNC ACCEPTED\n";
+					// Successfully accepted a connection
 					m_sessionsManager.setRoomsManager(&m_roomsManager);
 
-					auto client = std::make_shared<Cast::Network::Session>(std::move(*m_socket),
+					auto client = std::make_shared<Cast::Network::Session>(std::move(*CastServer::m_socket),
 						std::bind(&Cast::Network::SessionsManager::removeSession, &m_sessionsManager, std::placeholders::_1));
 
 					client->sendConnectionACK(Common::Enums::CAST_SERVER);
 				}
+				else
+				{
+					// Handle the error (you can log it, if preferred)
+					std::cerr << "Error accepting connection: " << error.message() << '\n';
+				}
 
+				// Continue accepting connections even if an error occurs
 				asyncAccept();
 			});
 	}

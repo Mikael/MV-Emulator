@@ -14,19 +14,18 @@ namespace Cast
 
 		inline void initHeightDeaths()
 		{
-			m_minHeightDeathPerMapLessThan[Common::Enums::Bitmap] = 24000; // less than = suicide
+			m_minHeightDeathPerMapLessThan[Common::Enums::Bitmap] = 20000; // less than = suicide
 			m_minHeightDeathPerMapMoreThan[Common::Enums::Chess] = 50000;  // more than = suicide
 			m_minHeightDeathPerMapMoreThan[Common::Enums::ToyFleet] = 54000; // more than = suicide
 			m_minHeightDeathPerMapMoreThan[Common::Enums::TrackersFactory] = 50000; // more than = suicide
 			m_minHeightDeathPerMapLessThan[Common::Enums::Beach] = 24000; // less than = suicide
-			m_minHeightDeathPerMapMoreThan[Common::Enums::Neighboorhood] = 60000; // more than = suicide
+			m_minHeightDeathPerMapMoreThan[Common::Enums::Neighboorhood] = 53000; // more than = suicide
 			m_minHeightDeathPerMapLessThan[Common::Enums::RumpusRoom] = 22000; // less than = suicide
 			m_minHeightDeathPerMapLessThan[Common::Enums::Cargo] = 20000; // less than = suicide
 			m_minHeightDeathPerMapLessThan[Common::Enums::JunkYard] = 24300; // less than = suicide
 			m_minHeightDeathPerMapLessThan[Common::Enums::Football] = 20000; // less than = suicide
 			m_minHeightDeathPerMapLessThan[Common::Enums::Bitmap2] = 20000; // less than = suicide
 			m_minHeightDeathPerMapMoreThan[Common::Enums::TheAftermath] = 57000; // more than = suicide
-
 		}
 
 		inline bool isSuicide(std::uint32_t map, std::uint32_t playerHeight)

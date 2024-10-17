@@ -20,12 +20,15 @@ namespace Main
 
 		void Shutdown::execute(Main::Network::Session& session, Main::Network::SessionsManager& sessionManager, Common::Network::Packet& response)
 		{
+			// Disconnect all the players
 			for (auto& currentSession: sessionManager.getAllSessions())
 			{
 				currentSession.second->closeSocket();
 			}
 
 			std::terminate();
+			this->m_confirmationMessage += "success";
+			sendConfirmation(response, session);
 			return;
 		}
 

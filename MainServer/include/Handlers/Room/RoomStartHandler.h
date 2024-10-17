@@ -46,6 +46,7 @@ namespace Main
             return availableMaps[dis(gen)];
         }
 
+
         inline void handleRoomStart(const Common::Network::Packet& request, Main::Network::Session& session, Main::Classes::RoomsManager& roomsManager,
             std::uint64_t timeSinceLastServerRestart)
         {
@@ -61,59 +62,60 @@ namespace Main
             auto selfUniqueId = session.getAccountInfo().uniqueId;
 
             // Player clicked "Start" to begin the match
-            if (request.getExtra() == RoomStartExtra::START_SUCCESS)
-            {
+            if (request.getExtra() == 38)
+            { 
+                // REMOVE WHEN IMPLEMENTED!!
+                auto gameMode = room.getRoomSettings().mode;
+                if (gameMode == Common::Enums::AiBattle || gameMode == Common::Enums::BossBattle) return;
 
-                    // REMOVE WHEN IMPLEMENTED!!
-                    auto gameMode = room.getRoomSettings().mode;
-                    if (gameMode == Common::Enums::AiBattle || gameMode == Common::Enums::BossBattle) return;
 
-                    auto& roomSettings = room.getRoomSettings();
+                auto& roomSettings = room.getRoomSettings();
 
-                    if (roomSettings.map == Common::Enums::GameMaps::Random)
-                    {
-                        auto randomMap = getRandomMapForGameMode(static_cast<Common::Enums::GameModes>(roomSettings.mode));
-                        room.updateMap(randomMap);
-                    }
+                if (roomSettings.map == Common::Enums::GameMaps::Random)
+                {
+                    auto randomMap = getRandomMapForGameMode(static_cast<Common::Enums::GameModes>(roomSettings.mode));
 
-                    room.startMatch(selfUniqueId);
-                    // Check if the session is already in a match
-                        session.setIsInMatch(true);
-                    response.setOrder(request.getOrder());
-                    response.setExtra(RoomStartExtra::START_SUCCESS);
-                    response.setOption(room.getRoomSettings().map);
-                    response.setData(reinterpret_cast<std::uint8_t*>(&selfUniqueId), sizeof(selfUniqueId));
-                    room.broadcastToRoom(response);
+                    room.updateMap(randomMap);
+                }
+                session.setIsInMatch(true);
 
-                    // Log the match start
-                    logger.log("The player " + session.getPlayerInfoAsString() + " is entering the match. "
+                room.startMatch(selfUniqueId);
+
+                response.setOrder(request.getOrder());
+                response.setExtra(38);
+                response.setOption(room.getRoomSettings().map);
+                response.setData(reinterpret_cast<std::uint8_t*>(&selfUniqueId), sizeof(selfUniqueId));
+                room.broadcastToRoom(response);
+
+                // Log the match start
+                logger.log("The player " + session.getPlayerInfoAsString() + " is entering the match. "
+                    + room.getRoomInfoAsString(), Utils::LogType::Normal, "Room::handleRoomStart");
+
+                // Temporary fix for potential bugs with starting matches after relogging
+                response.setOrder(125);
+                response.setMission(0);
+                response.setExtra(0);
+                response.setOption(roomSettings.mode);
+                auto settings = room.getRoomSettingsUpdate();
+                response.setData(reinterpret_cast<std::uint8_t*>(&settings), sizeof(settings));
+                session.asyncWrite(response);
+
+                // If the player is the host, notify other services about the room map and mode
+                if (room.isHost(selfUniqueId))
+                {
+                    Utils::MapInfo mapInfo{ room.getRoomSettings().map }; // Now using the updated map
+                    Utils::IPCManager::ipc_mainToCast(mapInfo, std::to_string(room.getRoomNumber()), "map_info");
+
+                    logger.log("The player " + session.getPlayerInfoAsString() + " is also host. Main=>Cast notification about room map and mode info sent. "
                         + room.getRoomInfoAsString(), Utils::LogType::Normal, "Room::handleRoomStart");
-
-                    // Temporary fix for potential bugs with starting matches after relogging
-                    response.setOrder(125);
-                    response.setMission(0);
-                    response.setExtra(0);
-                    response.setOption(roomSettings.mode);
-                    auto settings = room.getRoomSettingsUpdate();
-                    response.setData(reinterpret_cast<std::uint8_t*>(&settings), sizeof(settings));
-                    session.asyncWrite(response);
-
-                    // If the player is the host, notify other services about the room map and mode
-                    if (room.isHost(selfUniqueId))
-                    {
-                        Utils::MapInfo mapInfo{ room.getRoomSettings().map }; // Now using the updated map
-                        Utils::IPCManager::ipc_mainToCast(mapInfo, std::to_string(room.getRoomNumber()), "map_info");
-
-                        logger.log("The player " + session.getPlayerInfoAsString() + " is also host. Main=>Cast notification about room map and mode info sent. "
-                            + room.getRoomInfoAsString(), Utils::LogType::Normal, "Room::handleRoomStart");
-                    }
+                }
             }
             else if (request.getExtra() == 41)
             {
                 if (room.isHost(selfUniqueId))
                 {
                     response.setOrder(258);
-                    response.setExtra(1);
+                    response.setExtra(1 /* 5 == infinite loading for host ??*/);
                     response.setOption(0);
                     struct Response
                     {

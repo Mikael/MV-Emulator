@@ -17,7 +17,6 @@
 #include "ComplexCommands/OneArgumentCommands/SpawnItem.h"
 #include "SimpleRoomCommands/BreakroomCommand.h"
 #include "SimpleRoomCommands/Muteroom.h"
-#include "SimpleRoomCommands/bossmap.h"
 #include "SimpleRoomCommands/UnmuteRoom.h"
 #include "DatabaseCommands/UnbanOfflinePlayer.h"
 #include "DatabaseCommands/AddPlayer.h"

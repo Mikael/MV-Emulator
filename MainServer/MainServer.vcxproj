@@ -72,7 +72,6 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)$(Platform)\</OutDir>
-    <LibraryPath>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\curl-8.10.1_2-win64-mingw\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <VcpkgInstalledDir>..\ExternalLibraries\vcpkg\installed</VcpkgInstalledDir>
@@ -141,7 +140,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\cpp-httplib-master;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\json-develop\json-develop\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\curl-8.10.1_2-win64-mingw\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\curl-8.10.1_2-win64-mingw\lib;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\ExternalLibraries\curl-master (1)\curl-master\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\MainServer\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp;D:\range-v3\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\MainServer\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries;D:\boost_1_86_0;..\Common\include;..\ExternalLibraries\asio-1.24.0\include;..\ExternalLibraries</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\cpp-httplib-master;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master (1)\MicrovoltsEmulator-master\MainServer\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include\SQLiteCpp;D:\range-v3\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\SQLiteCpp\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\MainServer\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries\asio-1.24.0\include;C:\Users\mikae\OneDrive\Documents\MicrovoltsEmulator-master %281%29\MicrovoltsEmulator-master\ExternalLibraries;D:\boost_1_86_0;..\Common\include;..\ExternalLibraries\asio-1.24.0\include;..\ExternalLibraries</AdditionalIncludeDirectories>
       <Optimization>MaxSpeed</Optimization>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
@@ -152,7 +151,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>..\ExternalLibraries\CommonLib\Common.lib;..\ExternalLibraries\SQLiteCpp\sqlite3\sqlite3.lib;..\ExternalLibraries\SQLiteCpp\sqlite3\SQLiteCpp.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -175,7 +173,6 @@
     <ClCompile Include="src\ChatCommands\ComplexCommands\OneArgumentCommands\TiltClient.cpp" />
     <ClCompile Include="src\ChatCommands\DatabaseCommands\AddPlayer.cpp" />
     <ClCompile Include="src\ChatCommands\DatabaseCommands\UnbanPlayer.cpp" />
-    <ClCompile Include="src\ChatCommands\SimpleRoomCommands\bossmap.cpp" />
     <ClCompile Include="src\ChatCommands\SimpleRoomCommands\Muteroom.cpp" />
     <ClCompile Include="src\ChatCommands\SimpleCommands\OnlineCommand.cpp" />
     <ClCompile Include="src\ChatCommands\SimpleCommands\SetCurrency.cpp" />
@@ -207,7 +204,6 @@
     <ClInclude Include="include\ChatCommands\DatabaseCommands\AddPlayer.h" />
     <ClInclude Include="include\ChatCommands\DatabaseCommands\UnbanOfflinePlayer.h" />
     <ClInclude Include="include\ChatCommands\DatabaseCommands\UnmuteOfflinePlayer.h" />
-    <ClInclude Include="include\ChatCommands\SimpleRoomCommands\bossmap.h" />
     <ClInclude Include="include\ChatCommands\SimpleRoomCommands\Muteroom.h" />
     <ClInclude Include="include\ChatCommands\SimpleCommands\OnlineCommand.h" />
     <ClInclude Include="include\ChatCommands\SimpleCommands\SetCurrency.h" />
@@ -217,8 +213,6 @@
     <ClInclude Include="include\ChatCommands\SimpleRoomCommands\UnmuteRoom.h" />
     <ClInclude Include="include\Classes\Player.h" />
     <ClInclude Include="include\Classes\RoomsManager.h" />
-    <ClInclude Include="include\Database\MainScheduler.h" />
-    <ClInclude Include="include\Database\ThreadPool.h" />
     <ClInclude Include="include\Handlers\LobbyClanListHandler.h" />
     <ClInclude Include="include\Handlers\Player\BlockedPlayers\BlockPlayerHandler.h" />
     <ClInclude Include="include\Handlers\Player\BlockedPlayers\BlockRemoveHandler.h" />
@@ -258,8 +252,8 @@
     <ClInclude Include="include\Handlers\Trade\TradeLockHandler.h" />
     <ClInclude Include="include\Handlers\Trade\TradeInitializationHandler.h" />
     <ClInclude Include="include\Handlers\Trade\TradeRemoveItemHandler.h" />
-    <ClInclude Include="include\Network\AuthSession.h" />
     <ClInclude Include="include\Persistence\MainDatabaseManager.h" />
+    <ClInclude Include="include\Database\MainScheduler.h" />
     <ClInclude Include="include\Handlers\Item\BoughtItemHandler.h" />
     <ClInclude Include="include\Handlers\Player\Friends\FriendPlayersListHandler.h" />
     <ClInclude Include="include\Handlers\Player\InitialPlayerInfoHandlers.h" />

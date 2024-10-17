@@ -26,6 +26,31 @@ namespace Cast
 		public:
 			Room() = default;
 
+			~Room()
+			{
+				// Just for debug.
+				std::cout << "Room with number: " << m_roomNumber << " is being closed!\n";
+			}
+
+			// Debug
+			void printRoomState(const std::string& furtherInfo) const
+			{
+				std::cout << "____________________________\n";
+				std::cout << furtherInfo << ":\n\n";
+				std::cout << "Room Information:\n";
+				std::cout << "  Room Number: " << m_roomNumber << '\n';
+				std::cout << "Players:\n";
+				for (const auto& currentPlayer : m_players)
+				{
+					std::cout << "  - SessionID: " << currentPlayer.first
+						//<< "\n    RoomID: " << currentPlayer.second->getRoomId()
+						<< "\n    RoomNum: " << currentPlayer.second->getRoomNumber()
+						<< "\n    Is In Match: " << (currentPlayer.second->isInMatch() ? "Yes" : "No") << '\n';
+				}
+				std::cout << "____________________________\n";
+			}
+
+
 			Room(std::uint64_t hostSessionId, Cast::Network::Session* hostSession);
 
 			std::uint32_t getRoomNumber() const;
@@ -61,6 +86,8 @@ namespace Cast
 
 			void setMode(std::uint32_t modeId);
 			std::uint32_t getMode() const;
+
+			void setTick(std::uint32_t tick);
 
 			void leaveAllPLayers();
 		};

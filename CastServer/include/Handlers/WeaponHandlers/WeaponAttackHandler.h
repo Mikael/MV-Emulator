@@ -6,7 +6,6 @@
 #include <unordered_map>
 #include <iostream>
 #include <chrono>
-#include <corecrt_io.h>
 
 namespace Cast
 {
@@ -24,7 +23,7 @@ namespace Cast
 
         // Threshold for rate-limiting (adjust as necessary)
         const int MAX_PACKETS_PER_SECOND = 20;
-        const auto RESET_INTERVAL = std::chrono::seconds(2); // Reset every two seconds
+        const auto RESET_INTERVAL = std::chrono::seconds(2); // Reset every second
         const int MAX_EXCEED_COUNT = 3; // Maximum times to exceed the limit before disconnecting
 
         // Helper function to check and update the rate limit for a session
@@ -55,7 +54,6 @@ namespace Cast
         {
             int sessionId = session.getId();
 
-            // Check if the session is rate limited
             if (isRateLimited(sessionId))
             {
                 auto& data = rateLimitMap[sessionId];
@@ -70,22 +68,7 @@ namespace Cast
 
             try
             {
-                // Broadcast the weapon attack to the room
                 roomsManager.broadcastToRoom(sessionId, const_cast<Common::Network::Packet&>(request));
-
-                // Extract and print the shot position from the request packet
-                // Assuming the shot position is represented by a struct or can be extracted from the packet directly
-                struct ShotPosition
-                {
-                    std::uint16_t x;
-                    std::uint16_t y;
-                    std::uint16_t z;
-                };
-
-                ShotPosition shotPosition;
-                std::memcpy(&shotPosition, request.getData(), sizeof(ShotPosition)); // Extracting position data from the packet
-
-                std::cout << "Shot landed at position: (" << shotPosition.x << ", " << shotPosition.y << ", " << shotPosition.z << ")\n";
             }
             catch (const std::exception& e)
             {
@@ -98,7 +81,6 @@ namespace Cast
         {
             int sessionId = session.getId();
 
-            // Check if the session is rate limited
             if (isRateLimited(sessionId))
             {
                 auto& data = rateLimitMap[sessionId];
@@ -114,19 +96,6 @@ namespace Cast
             try
             {
                 roomsManager.playerForwardToHost(request.getSession(), sessionId, const_cast<Common::Network::Packet&>(request));
-
-                // Extract and print the shot position from the request packet
-                struct ShotPosition
-                {
-                    std::uint16_t x;
-                    std::uint16_t y;
-                    std::uint16_t z;
-                };
-
-                ShotPosition shotPosition;
-                std::memcpy(&shotPosition, request.getData(), sizeof(ShotPosition)); // Extracting position data from the packet
-
-                std::cout << "Shot landed at position: (" << shotPosition.x << ", " << shotPosition.y << ", " << shotPosition.z << ")\n";
             }
             catch (const std::exception& e)
             {
@@ -137,4 +106,4 @@ namespace Cast
     }
 }
 
-#endif // WEAPON_HOST_ATTACK_HANDLER_H
+#endif

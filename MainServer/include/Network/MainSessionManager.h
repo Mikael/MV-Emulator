@@ -21,8 +21,6 @@ namespace Main
 		public:
 			void setRoomsManager(Main::Classes::RoomsManager* roomsManager);
 
-			std::uint32_t getTotalSessions() const;
-
 			void addSession(Main::Network::Session* session);
 
 			void removeSession(std::size_t sessionId);

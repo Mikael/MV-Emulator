@@ -19,6 +19,39 @@ namespace Common
 {
 	namespace Network
 	{
+		//void Session::asyncWrite(const Common::Network::Packet& message)
+		//{
+		//	std::optional<std::uint32_t> key = std::nullopt;
+		//	if (m_crypt.isUsed)
+		//	{
+		//		key = m_crypt.UserKey;
+		//	}
+
+		//	std::vector<uint8_t> encryptedMessage = message.generateOutgoingPacket(key);
+
+		//	if (message.getOrder() != 71 && message.getOrder() != 72) {
+  //              if (key == std::nullopt) {
+  //                  //Common::Parser::parse_cast(encryptedMessage.data(), message.getFullSize(), 13006, "server","client");
+  //              } else {
+  //                  //Common::Parser::parse(encryptedMessage.data(), message.getFullSize(), 13000, "server", "client",m_crypt.UserKey);
+  //              }
+  //          }
+
+		//	asio::async_write(m_socket, asio::buffer(encryptedMessage.data(), message.getFullSize()),
+		//		[&, self = this->shared_from_this()](const asio::error_code& errorCode, std::size_t)
+		//		{
+		//			if (!errorCode)
+		//			{
+		//				//std::printf("Server message sent!\n");
+		//			}
+		//			else
+		//			{
+		//				std::printf("Failed to send server message: %s\n", errorCode.message().c_str());
+		//				//closeSocket();
+		//			}
+		//		});
+		//}
+
 		void Session::asyncWrite(const Common::Network::Packet& message)
 		{
 			std::optional<std::uint32_t> key = std::nullopt;
@@ -31,11 +64,16 @@ namespace Common
 
 			if (message.getOrder() != 71 && message.getOrder() != 72) {
 				if (key == std::nullopt) {
-					//Common::Parser::parse_cast(encryptedMessage.data(), message.getFullSize(), 13006, "server","client");
+					// Common::Parser::parse_cast(encryptedMessage.data(), message.getFullSize(), 13006, "server", "client");
 				}
 				else {
-					//Common::Parser::parse(encryptedMessage.data(), message.getFullSize(), 13000, "server", "client",m_crypt.UserKey);
+					// Common::Parser::parse(encryptedMessage.data(), message.getFullSize(), 13000, "server", "client", m_crypt.UserKey);
 				}
+			}
+
+			if (!m_socket.is_open()) {
+				std::printf("Socket is not open (state: %s), cannot send message.\n", m_socket.is_open() ? "open" : "closed");
+				return;
 			}
 
 			asio::async_write(m_socket, asio::buffer(encryptedMessage.data(), message.getFullSize()),
@@ -43,7 +81,7 @@ namespace Common
 				{
 					if (!errorCode)
 					{
-						//std::printf("Server message sent!\n");
+						// std::printf("Server message sent!\n");
 					}
 					else
 					{
@@ -159,17 +197,17 @@ namespace Common
 		{
 			return m_buffer.size();
 		}
-
+		
 		Common::Cryptography::Crypt Session::getUserCrypt() const
 		{
 			return m_crypt;
 		}
-
+		
 		Common::Cryptography::Crypt Session::getDefaultCrypt() const
 		{
 			return m_defaultCrypt;
 		}
-
+		
 		void Session::sendConnectionACK(Common::Enums::ServerType serverType)
 		{
 			Packet connectionAck;
@@ -177,63 +215,63 @@ namespace Common
 
 			switch (serverType)
 			{
-			case Enums::AUTH_SERVER:
-			{
-				struct AuthAck
+				case Enums::AUTH_SERVER:
 				{
-					std::int32_t key{ static_cast<std::int32_t>(rand() + 1) };
-					__time32_t timestamp{ static_cast<__time32_t>(std::time(0)) };
-				} authAck;
+					struct AuthAck
+					{
+						std::int32_t key{ static_cast<std::int32_t>(rand() + 1) };
+						__time32_t timestamp{ static_cast<__time32_t>(std::time(0)) };
+					} authAck;
 
-				m_crypt.KeySetup(authAck.key);
-				connectionAck.setData(reinterpret_cast<std::uint8_t*>(&authAck), sizeof(AuthAck));
-				connectionAck.setCommand(401, 0, static_cast<int>(Common::Enums::AUTH_SUCCESS), 0);
-				asyncWrite(connectionAck);
-				break;
-			}
+					m_crypt.KeySetup(authAck.key);
+					connectionAck.setData(reinterpret_cast<std::uint8_t*>(&authAck), sizeof(AuthAck));
+					connectionAck.setCommand(401, 0, static_cast<int>(Common::Enums::AUTH_SUCCESS), 0);
+					asyncWrite(connectionAck);
+					break;
+				}
 
-			case Enums::MAIN_SERVER:
-			{
-				// Copy pasted, can't #include Main here due to circular dependencies
-				struct UniqueId
+				case Enums::MAIN_SERVER:
 				{
-					std::uint32_t session : 16 = 0;
-					std::uint32_t server : 15 = 4;
-					std::uint32_t unknown : 1 = 0;
-				};
+					// Copy pasted, can't #include Main here due to circular dependencies
+					struct UniqueId
+					{
+						std::uint32_t session : 16 = 0;
+						std::uint32_t server : 15 = 4;
+						std::uint32_t unknown : 1 = 0;
+					};
 
-				struct MainAck
+					struct MainAck
+					{
+						std::int32_t key{ static_cast<std::int32_t>(rand() + 1) };
+						UniqueId uniqueId{};
+					} mainAck;
+
+					// This allows the ping to work for both cast and main server.
+					// This also sets the SessionID that the client will now use for this session's communication
+					mainAck.uniqueId.session = m_id;
+					mainAck.uniqueId.server = 4;
+
+					m_crypt.KeySetup(mainAck.key);
+					connectionAck.setData(reinterpret_cast<std::uint8_t*>(&mainAck), sizeof(MainAck));
+					connectionAck.setCommand(401, 0, static_cast<int>(Common::Enums::MAIN_SUCCESS), 1);
+					// nb. option = channel selected by user
+					// nb. success = e.g. MAIN_SUCCESS
+					asyncWrite(connectionAck);
+					break;
+				}
+
+				case Enums::CAST_SERVER:
 				{
-					std::int32_t key{ static_cast<std::int32_t>(rand() + 1) };
-					UniqueId uniqueId{};
-				} mainAck;
-
-				// This allows the ping to work for both cast and main server.
-				// This also sets the SessionID that the client will now use for this session's communication
-				mainAck.uniqueId.session = m_id;
-				mainAck.uniqueId.server = 4;
-
-				m_crypt.KeySetup(mainAck.key);
-				connectionAck.setData(reinterpret_cast<std::uint8_t*>(&mainAck), sizeof(MainAck));
-				connectionAck.setCommand(401, 0, static_cast<int>(Common::Enums::MAIN_SUCCESS), 1);
-				// nb. option = channel selected by user
-				// nb. success = e.g. MAIN_SUCCESS
-				asyncWrite(connectionAck);
-				break;
-			}
-
-			case Enums::CAST_SERVER:
-			{
-				m_crypt.isUsed = false;
-				struct CastAck
-				{
-					std::int32_t key{ static_cast<std::int32_t>(rand() + 1) };
-				} castAck;
-				connectionAck.setData(reinterpret_cast<std::uint8_t*>(&castAck), sizeof(castAck));
-				connectionAck.setCommand(401, 0, Common::Enums::CAST_SUCCESS, 0);
-				asyncWrite(connectionAck);
-				break;
-			}
+					m_crypt.isUsed = false;
+					struct CastAck
+					{
+						std::int32_t key{ static_cast<std::int32_t>(rand() + 1) };
+					} castAck;
+					connectionAck.setData(reinterpret_cast<std::uint8_t*>(&castAck), sizeof(castAck));
+					connectionAck.setCommand(401, 0, Common::Enums::CAST_SUCCESS, 0);
+					asyncWrite(connectionAck);
+					break;
+				}
 			}
 
 			asyncRead();

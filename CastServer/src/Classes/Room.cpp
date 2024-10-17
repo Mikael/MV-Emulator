@@ -108,7 +108,7 @@ namespace Cast
 		//	}
 		//	return m_players.empty();
 		//}
-		
+
 		// Returns true if the room must be closed because there are no players left, false otherwise
 		bool Room::removePlayer(std::uint64_t playerSessionId)
 		{

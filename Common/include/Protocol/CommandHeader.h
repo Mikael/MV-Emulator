@@ -18,7 +18,7 @@ namespace Common
 			std::uint32_t order : 10 = 0;   // Callback Number [max:1023]
 			std::uint32_t extra : 8 = 0;    // Used to elaborate results [max:255]
 			std::uint32_t option : 8 = 0;   // Options [max:255]
-
+				
 		public:
 			constexpr CommandHeader() = default;
 

@@ -14,7 +14,6 @@ namespace Main
 		{
 		private:
 			std::unordered_map<std::uint16_t, Main::Classes::Room> m_roomByNumber{};
-			std::vector<Main::Network::Session> m_sessions;
 
 		public:
 			void addRoom(const Main::Classes::Room& room);
@@ -23,15 +22,7 @@ namespace Main
 
 			std::size_t getTotalRooms() const;
 
-			Main::Classes::Room* getRoomByNumber2(std::uint16_t roomNumber);
-
 			std::vector<Main::Structures::SingleRoom> getRoomsList() const;
-
-			const std::vector<Main::Network::Session>& getSessions() const
-			{
-				return m_sessions;
-			}
-			std::vector<Main::Network::Session*> getSessions(std::uint16_t roomNumber);
 
 			std::optional<std::reference_wrapper<Main::Classes::Room>> getRoomByNumber(std::uint16_t roomNumber);
 

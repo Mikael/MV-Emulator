@@ -54,21 +54,21 @@
 
 #include "../include/Network/MainSession.h"
 #include "../include/ChatCommands/AllCommandsIncludes.h"
-#include <Network/AuthSession.h>
-#include <Utils/IPC_Structs.h>
+#include "../include/Utilities.h"
+
 
 namespace Main
 {
-	MainServer::MainServer(ioContext& io_context, std::uint16_t clientPort, std::uint16_t authPort, std::uint16_t serverId)
+	MainServer::MainServer(ioContext& io_context, std::uint16_t port, std::uint16_t serverId)
 		: m_io_context{ io_context }
-		, m_acceptor{ io_context, tcp::endpoint(tcp::v4(), clientPort) }
-		, m_authServerAcceptor{ io_context, tcp::endpoint(tcp::v4(), authPort) }
+		, m_acceptor{ io_context, tcp::endpoint(tcp::v4(), port) }
 		, m_serverId{ serverId }
 		, m_database{ "../ExternalLibraries/Database/GameDatabase.db" }
-		, m_scheduler{ 25, m_database }
-		, m_timeSinceLastRestart{ Utils::IPCManager::getCurrentTimeInMilliseconds() }
-
+		, m_scheduler{ 5, m_database }
 	{
+		const auto durationSinceEpoch = std::chrono::system_clock::now().time_since_epoch();
+		m_timeSinceLastRestart = static_cast<std::uint64_t>(duration_cast<std::chrono::milliseconds>(durationSinceEpoch).count());
+
 		initializeAllCommands();
 
 
@@ -98,32 +98,8 @@ namespace Main
 		Common::Network::Session::addCallback<Main::Network::Session>(68, [&](const Common::Network::Packet& request,
 			Main::Network::Session& session) { Main::Handlers::handleInitialPlayerInfos(request, session, m_sessionsManager, m_database, m_timeSinceLastRestart); });
 
-		Common::Network::Session::addCallback<Main::Network::Session>(71,
-			[&](const Common::Network::Packet& request, Main::Network::Session& session)
-			{
-				// Ensure the packet has enough data for Ping structure
-				if (request.getDataSize() < sizeof(Main::ClientData::Ping))
-				{
-					std::cerr << "Received packet with insufficient data for Ping." << std::endl;
-					return; // Early exit if there's not enough data
-				}
-
-				// Extract the ping data directly
-				const Main::ClientData::Ping& pingData = *reinterpret_cast<const Main::ClientData::Ping*>(request.getData());
-
-				// Create a modified ping data
-				Main::ClientData::Ping modifiedPingData = pingData;
-
-				// Halve the ping value (ensuring it stays within bounds)
-				modifiedPingData.ping = static_cast<std::uint32_t>(modifiedPingData.ping / 2);
-
-				// Call handlePing with the modified data
-				Main::Handlers::handlePing(request, session, m_roomsManager, modifiedPingData);
-			}
-		);
-
-
-
+		Common::Network::Session::addCallback<Main::Network::Session>(71, [&](const Common::Network::Packet& request,
+			Main::Network::Session& session) { Main::Handlers::handlePing(request, session, m_roomsManager, Details::parseData<Main::ClientData::Ping>(request)); });
 
 		Common::Network::Session::addCallback<Main::Network::Session>(74, [&](const Common::Network::Packet& request,
 			Main::Network::Session& session) { Main::Handlers::handleCharacterSelection(request, session, m_roomsManager); });
@@ -279,28 +255,21 @@ namespace Main
 		m_socket.emplace(m_io_context);
 		m_acceptor.async_accept(*m_socket, [&](asio::error_code error)
 			{
-				m_sessionsManager.setRoomsManager(&m_roomsManager);
-
-				auto client = std::make_shared<Main::Network::Session>(m_scheduler, std::move(*MainServer::m_socket),
-					std::bind(&Main::Network::SessionsManager::removeSession, &m_sessionsManager, std::placeholders::_1));
-
-				client->sendConnectionACK(Common::Enums::MAIN_SERVER);
-				asyncAccept();
-			});
-	}
-
-	void MainServer::asyncAcceptAuthServer()
-	{
-		m_authSocket.emplace(m_io_context);
-		m_authServerAcceptor.async_accept(*m_authSocket, [this](asio::error_code error)
-			{
 				if (!error)
 				{
-					auto authSession = std::make_shared<Main::Network::AuthSession>(std::move(*m_authSocket), m_sessionsManager);
-					authSession->start();
+					m_sessionsManager.setRoomsManager(&m_roomsManager);
+
+					auto client = std::make_shared<Main::Network::Session>(m_scheduler, std::move(*MainServer::m_socket),
+						std::bind(&Main::Network::SessionsManager::removeSession, &m_sessionsManager, std::placeholders::_1));
+
+					client->sendConnectionACK(Common::Enums::MAIN_SERVER);
+				}
+				else
+				{
+					std::cerr << "[MainServer::asyncAccept] Error: " << error.message() << '\n';
 				}
 
-				asyncAcceptAuthServer();
+				asyncAccept();
 			});
 	}
 
@@ -311,8 +280,8 @@ namespace Main
 		m_chatCommands.addSimpleCommand("online", std::make_unique<Main::Command::OnlineCommand>(Common::Enums::GRADE_NORMAL));
 		m_chatCommands.addSimpleCommand("shutdown", std::make_unique<Main::Command::Shutdown>(Common::Enums::GRADE_TESTER));
 		m_chatCommands.addComplexCommand("setlevel", std::make_unique<Main::Command::SetLevel>(Common::Enums::GRADE_NORMAL));
-		m_chatCommands.addComplexCommand("setname", std::make_unique<Main::Command::SetNickname>(Common::Enums::GRADE_MOD));
-		m_chatCommands.addComplexCommand("disconnect", std::make_unique<Main::Command::TiltClient>(Common::Enums::GRADE_MOD));
+		m_chatCommands.addComplexCommand("setname", std::make_unique<Main::Command::SetNickname>(Common::Enums::GRADE_TESTER));
+		m_chatCommands.addComplexCommand("disconnect", std::make_unique<Main::Command::TiltClient>(Common::Enums::GRADE_TESTER));
 		m_chatCommands.addComplexCommand("announce", std::make_unique<Main::Command::CreateAnnouncement>(Common::Enums::GRADE_TESTER));
 		m_chatCommands.addComplexCommand("tip", std::make_unique<Main::Command::CreateAnnouncement>(Common::Enums::GRADE_TESTER));
 		m_chatCommands.addComplexCommand("ban", std::make_unique<Main::Command::BanPlayer>(Common::Enums::GRADE_TESTER));
@@ -326,6 +295,5 @@ namespace Main
 		m_chatCommands.addSimpleRoomCommand("unmuteroom", std::make_unique<Main::Command::UnmuteRoom>(Common::Enums::GRADE_MOD));
 		m_chatCommands.addDatabaseCommand("unban", std::make_unique<Main::Command::UnbanAccount>(Common::Enums::GRADE_TESTER));
 		m_chatCommands.addDatabaseCommand("addplayer", std::make_unique<Main::Command::AddPlayer>(Common::Enums::GRADE_TESTER));
-		m_chatCommands.addSimpleRoomCommand("bossmap", std::make_unique<Main::Command::BossMap>(Common::Enums::GRADE_TESTER));
 	}
 }

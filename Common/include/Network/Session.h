@@ -14,7 +14,6 @@
 
 #include "Packet.h"
 #include "SessionIdManager.h"
-#include <iostream>
 
 
 namespace Common
@@ -33,10 +32,11 @@ namespace Common
 			Common::Cryptography::Crypt m_defaultCrypt{};
 			std::function<void(std::size_t)> m_onCloseSocketCallback{};
 			std::size_t m_id = 0;
+
 			template<class T>
 			inline static std::unordered_map<std::uint16_t, std::function<void(const Packet&, T&)>> callbacks;
 			inline static std::size_t id_counter = 1;
-			inline static SessionIdManager sessionIdManager{ 100 };
+			inline static SessionIdManager sessionIdManager{ 500 };
 
 		public:
 			Session() = default;
@@ -59,14 +59,11 @@ namespace Common
 			virtual ~Session()
 			{
 				sessionIdManager.releaseSessionID(m_id);
-				std::cout << "Releasing Session ID: " << m_id << std::endl; // Debug statement
-
 			}
 
 			void setSessionId(std::size_t id)
 			{
 				m_id = id;
-				std::cout << "Setting Session ID: " << id << std::endl; // Debug statement
 			}
 
 			void asyncWrite(const Common::Network::Packet& message);
@@ -83,7 +80,7 @@ namespace Common
 
 			void sendConnectionACK(Common::Enums::ServerType serverType);
 
-
+			
 			template<typename T>
 			static inline void addCallback(std::uint16_t idx, auto fnct)
 			{
